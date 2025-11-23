@@ -1,0 +1,9 @@
+{% autoescape off %}
+Olá {{ user.username }},
+
+Clica no link abaixo para confirmares a tua conta:
+
+ATENÇÃO: Este Link expira em 1 hora.
+
+http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+{% endautoescape %}

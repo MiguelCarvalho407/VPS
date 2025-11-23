@@ -1,0 +1,114 @@
+{% extends 'FC_APP/fcBase.html' %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/fcRecordes.css' %}">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<div class="container">
+    <h1>Criar Recorde</h1>
+
+    <form method="post" class="record-form">
+        {% csrf_token %}
+        
+        <!-- Mensagens de erro do formulário -->
+        {% if form.non_field_errors %}
+            <div class="error-messages">
+                <ul>
+                    {% for error in form.non_field_errors %}
+                        <li style="color: red; text-align: center;">{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <div class="form-column">
+            <label for="data_fim">Exercícios Predefinidos</label>
+            {{ form.predefinidos }}
+        </div>
+
+        <div class="form-column">
+            <label for="data_fim">Criados por mim <a href="{% url 'criarnomerecordes' %}">(Cria aqui)</a></label>
+            {{ form.nome }}
+        </div>
+
+        <div class="form-column">
+            <label for="data_fim">{{ form.valor.label }}</label>
+            {{ form.valor }}
+        </div>
+
+        <div class="form-column">
+            <label for="data_fim">{{ form.data_do_recorde.label }}</label>
+            {{ form.data_do_recorde }}
+        </div>
+
+        <button type="submit" class="btn-submit">Criar Recorde</button>
+    </form>
+
+    <h2>Recordes Criados</h2>
+
+    <div class="filter-container">
+        <form method="get" class="filter-form">
+            <select name="q" class="filter-select">
+                <option value="" {% if not query %}selected{% endif %}>Todos</option>
+                
+                <!-- Nomes disponíveis -->
+                {% for nome in nomes_disponiveis %}
+                <option value="{{ nome.nome }}" {% if query == nome.nome %}selected{% endif %}>
+                    {{ nome.nome }}
+                </option>
+                {% endfor %}
+    
+                <!-- Exercícios predefinidos -->
+                {% for predefinido in predefinidos_disponiveis %}
+                <option value="{{ predefinido.value }}" {% if query == predefinido.value %}selected{% endif %}>
+                    {{ predefinido.label }}
+                </option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn-submit">Filtrar</button>
+        </form>
+    </div>
+    
+    {% if recorde %}
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Recorde</th>
+                        <th>Valor</th>
+                        <th>Data Recorde</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for recorde in recorde %}
+                    <tr>
+                        <td>
+                        {% if recorde.nome %}
+                            {{ recorde.nome }}
+                        {% else %}
+                            {{ recorde.get_predefinidos_display }}
+                        {% endif %}
+                        </td>
+                        <td>{{ recorde.valor }}</td>
+                        <td>{{ recorde.data_do_recorde|date:"d/m/Y" }}</td>
+                        <td>
+                            <form action="{% url 'apagar_recorde' recorde.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-apagar-recorde">Apagar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="no-records">Nenhum recorde encontrado.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

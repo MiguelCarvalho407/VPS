@@ -1,0 +1,128 @@
+.cartao {
+    width: 400px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    padding: 30px;
+    font-family: Arial, sans-serif;
+    border: 2px solid black;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 25vh;
+}
+
+.cartao img {
+    width: 100px;
+    margin-bottom: 15px;
+}
+
+.cartao h2 {
+    font-size: 22px;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 5px;
+}
+
+.cartao hr {
+    border: none;
+    height: 2px;
+    background: black;
+    margin: 10px auto;
+    width: 80%;
+}
+
+.cartao p {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+
+
+@media (max-width: 768px) {
+    .cartao {
+        width: 80%;
+        padding: 15px;
+    }
+    
+    .cartao img {
+        width: 70px;
+    }
+    
+    .cartao h2 {
+        font-size: 20px;
+    }
+
+    .cartao p {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .cartao {
+        width: 95%;
+        padding: 10px;
+    }
+    
+    .cartao img {
+        width: 60px;
+    }
+    
+    .cartao h2 {
+        font-size: 18px;
+    }
+
+    .cartao p {
+        font-size: 14px;
+    }
+}
+
+
+
+.parcerias-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin: 40px auto;
+    max-width: 1000px;
+    padding: 10px;
+}
+
+.parceria {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    padding: 15px;
+    border: 1px solid #ddd;
+}
+
+
+.parceria img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.parceria p {
+    font-size: 14px;
+    color: #333;
+    margin-top: 5px;
+    line-height: 1.4;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .parcerias-container {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .parcerias-container {
+        grid-template-columns: 1fr;
+    }
+}

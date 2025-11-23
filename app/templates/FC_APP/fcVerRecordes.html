@@ -1,0 +1,100 @@
+{% extends 'FC_APP/fcBase.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/fcRecordes.css' %}">
+
+<div class="container">
+    <h1>Recordes - {{ utilizador.username }}</h1>
+
+    <!-- Botão para mostrar o form
+    <button id="toggleFormBtn" class="btn-criar">Criar Recorde</button>
+
+     Formulário oculto
+    <div id="formContainer" style="display:none; margin-top: 20px;">
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn-criar">Salvar</button>
+        </form>
+    </div> -->
+
+    <div class="recordes-section">
+    
+        {% if form.errors %}
+            <div class="error-messages">
+                {{ form.errors }}
+            </div>
+        {% endif %}
+    
+        <form method="POST" class="record-form">
+            {% csrf_token %}
+    
+            <div class="form-group">
+                {{ form.nome.label_tag }}
+                {{ form.nome }}
+            </div>
+    
+            <div class="form-group">
+                {{ form.predefinidos.label_tag }}
+                {{ form.predefinidos }}
+            </div>
+    
+            <div class="form-group">
+                {{ form.valor.label_tag }}
+                {{ form.valor }}
+            </div>
+    
+            <div class="form-group">
+                {{ form.data_do_recorde.label_tag }}
+                {{ form.data_do_recorde }}
+            </div>
+    
+            <button type="submit" class="btn-criar-recorde-utilizador">Criar Recorde - {{ utilizador.username }} </button>
+        </form>
+    </div>
+    
+
+    {% if recordes %}
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Recorde</th>
+                        <th>Valor</th>
+                        <th>Data Recorde</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for recorde in recordes %}
+                        {% if recorde.valor %}
+                        <tr>
+                            <td>
+                                {% if recorde.nome %}
+                                    {{ recorde.nome }}
+                                {% else %}
+                                    {{ recorde.nome }}
+                                {% endif %}
+                            </td>
+                            <td>{{ recorde.valor }}</td>
+                            <td>{{ recorde.data_do_recorde|date:"d/m/Y" }}</td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="no-records">Nenhum recorde encontrado para este utilizador.</p>
+    {% endif %}
+
+    <a href="{% url 'detalhe_utilizador' utilizador.id %}" class="btn-voltar">Voltar</a>
+</div>
+
+<script>
+    document.getElementById("toggleFormBtn").addEventListener("click", function () {
+        const formContainer = document.getElementById("formContainer");
+        formContainer.style.display = formContainer.style.display === "none" ? "block" : "none";
+    });
+</script>
+{% endblock %}

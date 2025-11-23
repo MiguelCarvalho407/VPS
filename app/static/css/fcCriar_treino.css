@@ -1,0 +1,127 @@
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f3f4f6;
+}
+
+.messages-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    color: red;
+    margin-bottom: 20px;
+}
+
+.training-container-alt {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #eee;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc;
+}
+
+.titulo-alt {
+    text-align: center;
+    font-size: 2rem;
+    color: black;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.form-horizontal {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.form-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+label {
+    font-weight: bold;
+    font-size: 1rem;
+    color: black;
+}
+
+input,
+select,
+textarea {
+    padding: 10px;
+    font-size: 1rem;
+    border: 2px solid rgb(94, 92, 92);
+    border-radius: 5px;
+    background-color: #ffffff;
+    color: black;
+    outline: none;
+    transition: border-color 0.3s ease-in-out;
+}
+
+
+textarea {
+    resize: none;
+    height: 80px;
+}
+
+.form-actions {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.btn-submit {
+    background-color: #066a1d;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.btn-submit:hover {
+    background-color: #078124;
+}
+
+.btn-voltar{
+    display: flex;
+    margin-top: 1%;
+    width: 100%;
+    background-color: #4b5563;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .btn-submit {
+        width: 100%;
+    }
+}

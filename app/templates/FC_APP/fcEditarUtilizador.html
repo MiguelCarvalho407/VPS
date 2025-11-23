@@ -1,0 +1,101 @@
+{% extends 'FC_APP/fcBase.html' %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/fcEditarUtilizador.css' %}">
+
+<div class="edit-user-container">
+    <h2 class="titulo">Editar Utilizador - {{ utilizador.username }}</h2>
+
+    <form method="post" class="edit-user-form">
+        {% csrf_token %}
+
+        <div class="form-grid">
+            <div class="form-group">
+                {{ form.username.label_tag }}
+                {{ form.username }}
+            </div>
+            <div class="form-group">
+                {{ form.email.label_tag }}
+                {{ form.email }}
+            </div>
+            <div class="form-group">
+                {{ form.data_nascimento.label_tag }}
+                {{ form.data_nascimento }}
+            </div>
+            <div class="form-group">
+                {{ form.contacto.label_tag }}
+                {{ form.contacto }}
+            </div>
+            <div class="form-group">
+                {{ form.morada.label_tag }}
+                {{ form.morada }}
+            </div>
+            <div class="form-group">
+                {{ form.localidade.label_tag }}
+                {{ form.localidade }}
+            </div>
+            <div class="form-group">
+                {{ form.codigo_postal.label_tag }}
+                {{ form.codigo_postal }}
+            </div>
+            <div class="form-group">
+                {{ form.genero.label_tag }}
+                {{ form.genero }}
+            </div>
+            <div class="form-group">
+                {{ form.nif.label_tag }}
+                {{ form.nif }}
+            </div>
+            <div class="form-group">
+                {{ form.pretende_recibo.label_tag }}
+                {{ form.pretende_recibo }}
+            </div>
+            <div class="form-group">
+                {{ form.profissao.label_tag }}
+                {{ form.profissao }}
+            </div>
+            <div class="form-group">
+                {{ form.classificacao_esforco_na_profissao.label_tag }}
+                {{ form.classificacao_esforco_na_profissao }}
+            </div>
+            <div class="form-group">
+                {{ form.fumador.label_tag }}
+                {{ form.fumador }}
+            </div>
+            <div class="form-group">
+                {{ form.problemas_saude.label_tag }}
+                {{ form.problemas_saude }}
+            </div>
+            <div class="form-group">
+                {{ form.limitacoes_para_pratica_exercicio_fisico.label_tag }}
+                {{ form.limitacoes_para_pratica_exercicio_fisico }}
+            </div>
+            <div class="form-group">
+                <label for="">Como tiveste conhecimento da existência do FITCLUB:</label>
+                {{ form.como_teve_conhecimento_existencia_fitclub }}
+            </div>
+            <div class="form-group">
+                <label for="">Estado da conta:</label>
+                {{ form.funcao }}
+            </div>
+            <div class="form-group">
+                <label for="">Permissões de Treinador:</label>
+                {{ form.is_staff }}
+            </div>
+            <div class="form-group">
+                <label for="">Regime:</label>
+                {{ form.regime }}
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button type="submit" class="btn-primary">Guardar Alterações</button>
+            <a href="{% url 'exportar_utilizador' utilizador.id %}" class="btn-secondary">Descarregar Informações</a>
+            <a href="{% url 'detalhe_utilizador' utilizador.id %}" class="btn-voltar">Voltar</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

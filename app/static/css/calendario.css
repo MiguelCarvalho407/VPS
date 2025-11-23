@@ -1,0 +1,425 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #fff;
+}
+
+.calendar-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #23272a;
+    border-radius: 10px;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.calendar-header button {
+    background-color: #7289da;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.calendar-header button:hover {
+    background-color: #5b6ea4;
+}
+
+.legend {
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 10px;
+}
+
+.weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.days-grid .day {
+    background-color: #99aab5;
+    border-radius: 5px;
+    min-height: 100px;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.days-grid .day .event {
+    width: 100%;
+    margin: 2px 0;
+    padding: 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    color: #fff;
+    background-color: rgb(0, 188, 212);
+    transition: background-color 0.3s;
+    cursor: pointer;
+}
+
+.days-grid .day .event:hover {
+    background-color: rgb(5, 143, 161);
+}
+
+.days-grid .day.today {
+    border: 2px solid red;
+}
+
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    transition: opacity 0.3s ease;
+}
+
+.modal.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal-content {
+    background: #23272a;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    width: 80%;
+    max-width: 500px;
+
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-close{
+    top: 15px;
+    right: 20px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    transition: color 0.3s, transform 0.2s;
+    background-color: transparent;
+    border: none;
+    margin-left: 97%;
+}
+
+.btn-ver-mais {
+    background-color: #5a6268;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #fff;
+    text-align: center;
+    font-weight: bold;
+}
+
+.modal-body {
+    margin-bottom: 20px;
+
+    /* max-height: 60vh;
+    overflow-y: auto; */
+}
+
+.modal-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.modal-label {
+    font-weight: bold;
+    color: #c0c0c0;
+}
+
+.modal-data {
+    color: #eee;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 5%;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.modal-actions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+}
+
+
+.modal-actions a {
+    text-align: center;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+    display: inline-block;
+}
+
+.modal-actions a#reservar-link {
+    background-color: #28a745;
+}
+
+.modal-actions a#detalhes-link {
+    background-color: #6c757d;
+}
+
+.modal-actions a#editar-link {
+    background-color: #007bff;
+}
+
+.modal-actions a#apagar-link {
+    background-color: #ffc107;
+}
+
+.modal-actions a#reservar-link:hover {
+    background-color: #218838;
+}
+
+.modal-actions a#detalhes-link:hover {
+    background-color: #5a6268;
+}
+
+.modal-actions a#editar-link:hover {
+    background-color: #0056b3;
+}
+
+.modal-actions a#apagar-link:hover {
+    background-color: #be9107;
+}
+
+.btn-disabled {
+    opacity: 0.6;
+    cursor: not-allowed; /* QUANDO JÁ PASSOU DA HORA NO TREINO NAO DA PARA MARCAR PRESENÇA */
+}
+
+.days-grid .day .event.reserved { /* QUANDO É MARCADA A PRESENÇA O TREINO MUDA DE COR */
+    background-color: #4caf50;
+    color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+.calendar-container .btn-criar-evento,
+.calendar-container .btn-apagar-treinos-massa {
+    display: block; /* Faz os botões ficarem um em cima do outro */
+    width: 200px; /* Define um tamanho consistente para os botões */
+    margin: 10px auto; /* Centraliza os botões horizontalmente */
+    padding: 10px 20px;
+    text-align: center;
+    border-radius: 5px;
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Botão "Criar Evento" */
+.calendar-container .btn-criar-evento {
+    background-color: #28a745; /* Cor verde */
+}
+
+.calendar-container .btn-criar-evento:hover {
+    background-color: #218838;
+}
+
+/* Botão "Apagar Eventos" */
+.calendar-container .btn-apagar-treinos-massa {
+    background-color: #dc3545; /* Cor vermelha */
+}
+
+.calendar-container .btn-apagar-treinos-massa:hover {
+    background-color: #c82333;
+}
+
+.btn-ver-treinos {
+    background-color: rgb(0, 188, 212);
+    color: white;
+    border: none;
+    padding: 4px 5px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    display: block;
+    margin: 5px auto;
+}
+
+
+.detalhes-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.detalhe-item {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #444;
+    padding: 5px 0;
+}
+
+.detalhe-label {
+    font-weight: bold;
+    color: #c0c0c0;
+    text-align: left;
+    flex: 1;
+}
+
+.detalhe-valor {
+    text-align: right;
+    flex: 1;
+    color: #eee;
+}
+
+
+.btn-ver-mais.reservado {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+
+.treino-buttons {
+    display: flex;
+    flex-direction: column; /* Organiza os botões em coluna */
+    gap: 5px; /* Espaço entre os botões */
+    margin-top: 10px; /* Espaço superior para separar da linha */
+    padding-top: 10px; /* Espaço extra acima */
+    border-top: 1px solid #444; /* Linha separadora */
+}
+
+.btn-ver-mais{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 100%; /* Faz os botões ocuparem a largura toda */
+    text-align: center; /* Centraliza o texto */
+    padding: 8px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.cancelar-reserva {
+    display: block; /* Faz o <a> se comportar como um bloco */
+    width: 100%; /* Garante que ele ocupe toda a largura */
+    text-align: center; /* Centraliza o texto */
+    background-color: #dc3545;
+    color: white;
+    padding: 4px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.cancelar-reserva {
+    background-color: #dc3545;
+    color: white;
+}
+
+
+
+.message-container {
+    display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Ajusta o alinhamento vertical */
+    width: 100%;
+    margin-top: 20px; /* Espaço superior para não ficar colado ao topo */
+}
+
+.alert {
+    padding: 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 80%;
+    max-width: 400px;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+
+
+
+@media (max-width: 768px) {
+    .days-grid{
+        display: grid;
+        gap: 5px;
+        grid-template: none; /* FAZ COM QUE OS DIAS APAREÇAM SEGUIDOS E NÃO DE 7 EM 7 */
+    }
+
+    .weekdays{
+        visibility: hidden; /* PARA NÃO APARECER OS DIAS DA SEMANA ABAIXO DO MÊS */
+    }
+}
+
+@media (max-width: 600px) {
+    .btn-ver-treinos {
+        font-size: 16px;
+        padding: 12px;
+        max-width: 100%;
+    }
+}

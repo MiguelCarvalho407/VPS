@@ -1,0 +1,26 @@
+{% extends 'FC_APP/fcBase.html' %}
+{% load static %}
+{% block content %}
+    <h1>Lista de Espera Cheia</h1>
+    <p>O treino dia "{{ treino.data_inicio }} às {{ treino.hora_inicio }}" atingiu o número máximo de fila de espera.</p>
+    <a href="{% url 'calendario' %}" class="a-voltar">Voltar ao calendário</a>
+
+<style>
+    h1{
+        text-align: center;
+        margin-top: 5%;
+    }
+
+    p{
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    .a-voltar{
+        margin-top: 15px;
+       display: flex;
+       justify-content: center;
+    }
+</style>
+
+{% endblock %}

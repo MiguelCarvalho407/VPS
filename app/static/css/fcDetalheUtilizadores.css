@@ -1,0 +1,151 @@
+/* Estilos gerais */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f4f4f9;
+}
+
+/* Container principal */
+.user-info-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Título */
+.user-info-container h1 {
+    text-align: center;
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* Grid de informações do perfil */
+.perfil-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.perfil-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.perfil-group label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.perfil-group span,
+.perfil-group p {
+    font-size: 14px;
+    color: #333;
+}
+
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap; /* Para garantir que os botões reorganizem em telas menores */
+    margin-top: 5%;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-secondary {
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #28a745;
+    transition: all 0.3s ease;
+}
+
+.btn-apagar-conta{
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #fff;
+    background-color: red;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-voltar {
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #4b5563;
+    transition: all 0.3s ease;
+}
+
+.btn-recordes{
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #343a40;
+    transition: all 0.3s ease;
+}
+
+.btn-assiduidade{
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #17a2b8;
+    transition: all 0.3s ease;
+}
+
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .perfil-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .button-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .button-group a,
+    .button-group form {
+        width: 100%;
+        max-width: none;
+        margin-bottom: -5px;
+    }
+
+    .btn-apagar-conta {
+        width: 100%;
+        display: block;
+        text-align: left;
+    }
+
+}

@@ -1,0 +1,160 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/fcSignup.css' %}">
+    <link rel="shortcut icon" href="{% static 'imagens/fitclub1.png' %}" type="image/x-icon">
+    <title>FitClub - Criar Conta</title>
+</head>
+<body>
+    <div class="container">
+        <div class="login form">
+            <header>
+                <img src="{% static 'imagens/fitclub1.png' %}" alt="FitClub" class="header-logo">
+            </header>
+            <form method="post" class="form-container-login">
+                {% csrf_token %}
+
+                <div class="inputBox">
+                    <label for="nome">Nome:</label>
+                    {{ form.nome }}
+                    {% for error in form.nome.errors %}
+                        <span class="text-danger" style="color: red;">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="inputBox">
+                    <label for="email">Email:</label>
+                    {{ form.email }}
+                    {% for error in form.email.errors %}
+                        <span class="text-danger" style="color: red;">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="inputBox">
+                    <label for="password">Password:</label>
+                    {{ form.password }}
+                    {% for error in form.confirmar_password.errors %}
+                        <span class="text-danger" style="color: red;">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="inputBox">
+                    <label for="confirmar_password">Confirmar Password:</label>
+                    {{ form.confirmar_password }}
+                    {% for error in form.confirmar_password.errors %}
+                        <span class="text-danger" style="color: red;">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="inputBox">
+                    <label for="data_nascimento">Data de Nascimento:</label>
+                    {{ form.data_nascimento }}
+                    {% for error in form.data_nascimento.errors %}
+                        <span class="text-danger" style="color: red;">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="inputBox">
+                    <label for="data_nascimento">Contacto:</label>
+                    {{ form.contacto }}
+                    {% for error in form.contacto.errors %}
+                        <span class="text-danger" style="color: red;">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="inputBox">
+                    <label for="nif">NIF:</label>
+                    {{ form.nif }}
+                    {% for error in form.nif.errors %}
+                        <span class="text-danger" style="color: red;">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="inputBox">
+                    <label for="nif">Profissão:</label>
+                    {{ form.profissao }}
+                    {% for error in form.profissao.errors %}
+                        <span class="text-danger" style="color: red;">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="inputBox">
+                    <label for="pretende_recibo">Pretende Recibo:</label>
+                    {{ form.pretende_recibo }}
+                    {% for error in form.pretende_recibo.errors %}
+                        <span class="text-danger" style="color: red;">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="inputBox">
+                    <label for="classificacao_esforco_na_profissao">Classificação do Esforço na Profissão:</label>
+                    {{ form.classificacao_esforco_na_profissao }}
+                    {% for error in form.classificacao_esforco_na_profissao.errors %}
+                        <span class="text-danger" style="color: red;">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="inputBox">
+                    <label for="fumador">Fumador:</label>
+                    {{ form.fumador }}
+                    {% for error in form.fumador.errors %}
+                        <span class="text-danger" style="color: red;">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="inputBox">
+                    <label for="problemas_saude">Problemas de Saúde:</label>
+                    {{ form.problemas_saude }}
+                    {% for error in form.problemas_saude.errors %}
+                        <span class="text-danger" style="color: red;">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="inputBox">
+                    <label for="limitacoes_para_pratica_exercicio_fisico">Limitações para Prática de Exercício Físico:</label>
+                    {{ form.limitacoes_para_pratica_exercicio_fisico }}
+                    {% for error in form.limitacoes_para_pratica_exercicio_fisico.errors %}
+                        <span class="text-danger" style="color: red;">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="inputBox">
+                    <label for="genero">Género:</label>
+                    {{ form.genero }}
+                    {% for error in form.genero.errors %}
+                        <span class="text-danger" style="color: red;">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                
+                <div class="inputBox">
+                    <label for="genero">Como tiveste conhecimento da existência do FITCLUB:</label>
+                    {{ form.como_teve_conhecimento_existencia_fitclub }}
+                    {% for error in form.como_teve_conhecimento_existencia_fitclub.errors %}
+                        <span class="text-danger" style="color: red;">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="inputBox">
+                    <label for="genero">Chave:</label>
+                    {{ form.chave }}
+                    {% for error in form.chave.errors %}
+                        <span class="text-danger" style="color: red;">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+
+                <input type="submit" class="button" value="Criar Conta">
+            </form>
+
+            <div class="signup">
+                Já tem conta? <a href="{% url 'login' %}">Login</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,164 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <title>FitClub - Início</title>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">
+            <img src="{% static 'imagens/fitclub_inverted-removebg-preview.png' %}" class="logo-foto">
+        </div>
+
+        <div class="hamburguer">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
+        </div>
+
+        <nav class="nav-bar">
+            <ul>
+                <li>
+                    <a href="{% url 'calendario' %}">Calendário</a>
+                </li>
+
+                <li>
+                    <div class="dropdown">
+                        <button onclick="myFunction()" class="dropbtn">Treinos Online &#9662;</button>
+                        <div id="myDropdown" class="dropdown-content">
+                            <a href="{% url 'funcionais' %}">Funcional</a>
+                            <a href="{% url 'mobilidade' %}">Mobilidade</a>
+                            <a href="{% url 'força' %}">Força</a>
+                            <a href="{% url 'metabolico' %}">Metabólico</a>
+                            <a href="{% url 'aerobica' %}">Aeróbica</a>
+                            {% if request.user.is_staff %}
+                            <a href="{% url 'criar_treino_online' %}">Criar Treino Online</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <a href="{% url 'recordes' %}">Recordes</a>
+                </li>
+                <li>
+                    <a href="{% url 'assiduidade' %}">Assiduidade</a>
+                </li>
+                <li>
+                    <a href="{% url 'dadosbiometricos' %}">Dados Biométricos</a>
+                </li>
+
+                <li>
+                    <div class="dropdown">
+                        <button onclick="myFunction3()" class="dropbtn">Normas e Regras de Funcionamento &#9662;</button>
+                        <div id="myDropdown3" class="dropdown-content">
+                            <a href="{% url 'contactos_direitos_imagem' %}">Contactos e Direitos Imagem</a>
+                            <a href="{% url 'marcacoes_cancelamentos' %}">Marcações e Cancelamentos</a>
+                            <a href="{% url 'suspensao_cancelamento_inscricao' %}">Suspensão e Cancelamento Inscrição</a>
+                            <a href="{% url 'mensalidades' %}">Mensalidades</a>
+                            <a href="{% url 'regras_treino' %}">Regras de Treino</a>
+                        </div>
+                    </div>
+                </li>
+                
+                <li>
+                    <div class="dropdown">
+                        <button onclick="myFunction2()" class="dropbtn">Outros &#9662;</button>
+                        <div id="myDropdown2" class="dropdown-content2">
+                            <a href="{% url 'membros' %}">Membros</a>
+                            <a href="{% url 'definicoes' %}">Perfil</a>
+                            <a href="{% url 'cartao' %}">Cartão FITCLUB</a>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <a href="{% url 'logout' %}">Logout</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    {% block content %}
+    <p class="bvd-utilizador">Bem-Vindo, <b>{{ request.user.username }}</b>!</p>
+    {% if reservas_confirmadas %}
+        <p class="msg-motivacao">Este mês já realizaste <b>{{ reservas_confirmadas }}</b> treino(s). Continua forte!💪</p>
+    {% else %}
+        <p class="msg-motivacao">Ainda não realizaste nenhum treino este mês. Vamos começar! 🏋️‍♂️</p>
+    {% endif %}
+    <img src="{% static 'imagens/fitclub1.png' %}" alt="fitclub" class="img-fcBase">
+
+    <!-- MOSTRAR A QUANTOS TREINOS O UTILIZADOR FOI NA SEMANA | QUAL É O PRÓXIMO TREINO | ADICIONAR UMA MOTIVAÇÃO "💪 Bora, João! Já treinaste 2 vezes esta semana. Mantém o ritmo!" -->
+
+    {% if ausencias %}
+    <div class="ausencias-container">
+        <div class="ausencias-box">
+            <h3>⚠️ Tens ausências pendentes:</h3>
+            <ul>
+                {% for ausencia in ausencias %}
+                    <li class="ausencia-item">
+                        <p><strong>Treino:</strong> {{ ausencia.reserva.treino.tipo }}</p>
+                        <p><strong>Data:</strong> {{ ausencia.reserva.treino.data_inicio }}</p>
+                        <p><strong>Hora:</strong> {{ ausencia.reserva.treino.hora_inicio }} - {{ ausencia.reserva.treino.hora_fim }}</p>
+
+                        <form method="post" class="ausencia-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="ausencia_id" value="{{ ausencia.id }}">
+                            <label><strong>Já pagaste a taxa de ausência?</strong></label><br>
+                            <button type="submit" name="resposta" value="sim" class="btn-sim">Sim</button>
+                            <!-- <button type="submit" name="resposta" value="nao" class="btn-nao">Não</button> -->
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endif %}
+
+
+
+    {% endblock %}
+
+    <script>
+        const hamburguer = document.querySelector(".hamburguer");
+        hamburguer.onclick = function () {
+            const navBar = document.querySelector(".nav-bar");
+            navBar.classList.toggle("active");
+        };
+
+        function myFunction() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
+
+        function myFunction2() {
+            document.getElementById("myDropdown2").classList.toggle("show");
+        }
+
+        function myFunction3() {
+            document.getElementById("myDropdown3").classList.toggle("show");
+        }
+
+        // Fechar dropdowns se clicar fora
+        window.onclick = function (event) {
+            if (!event.target.matches('.dropbtn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var dropdowns2 = document.getElementsByClassName("dropdown-content2");
+                for (let dd of dropdowns) {
+                    dd.classList.remove("show");
+                }
+                for (let dd of dropdowns2) {
+                    dd.classList.remove("show");
+                }
+            }
+        }
+    </script>
+
+
+</body>
+
+</html>

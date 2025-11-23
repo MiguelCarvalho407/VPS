@@ -1,0 +1,71 @@
+{% extends 'FC_APP/fcBase.html' %}
+
+{% block content %}
+
+<h2 class="delete-warning">Tens a certeza que desejas cancelar este treino?</h2>
+<p class="p-apagar">Ao continuares com esta opção o treino será removido do calendário <br> e todos os utilizadores
+    receberão um email a dizer que este treino foi cancelado</p>
+
+<form method="post" class="delete-form">
+    {% csrf_token %}
+    <button type="submit" class="btn-confirm">Sim</button>
+    <a href="{% url 'calendario' %}" class="btn-cancel">Cancelar</a>
+</form>
+
+
+<style>
+    .delete-warning {
+        margin-top: 20%;
+        text-align: center;
+        color: #DC3545;
+        font-family: 'Arial', sans-serif;
+        margin-bottom: 20px;
+    }
+
+    .delete-form {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .btn-confirm {
+        padding: 10px 20px;
+        background-color: #DC3545;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-confirm:hover {
+        background-color: #C82333;
+    }
+
+    .btn-cancel {
+        padding: 10px 20px;
+        background-color: #6C757D;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-cancel:hover {
+        background-color: #5A6268;
+    }
+
+    .btn-cancel:focus,
+    .btn-cancel:visited {
+        text-decoration: none;
+        color: white;
+    }
+
+    .p-apagar {
+        text-align: center;
+        margin-bottom: 1%;
+    }
+</style>
+{% endblock %}

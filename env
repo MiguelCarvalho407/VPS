@@ -1,0 +1,6 @@
+EMAIL_HOST=webdomain01.dnscpanel.com
+EMAIL_PORT=465
+EMAIL_USE_SSL=True
+EMAIL_HOST_USER=no-reply@fitclubns17.pt
+EMAIL_HOST_PASSWORD=i0p4AVpk5eMiSGkx
+DEFAULT_FROM_EMAIL=no-reply@fitclubns17.pt

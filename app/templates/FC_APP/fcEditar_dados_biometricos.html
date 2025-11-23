@@ -1,0 +1,82 @@
+{% extends 'FC_APP/fcBase.html' %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/fcDados_biometricos.css' %}">
+
+<div class="biometric-data-container">
+
+    <h2 class="section-title">Dados Biométricos - {{ utilizador.username }}</h2>
+
+    <!-- FILTRAR OS DADOS POR MÊS -->
+    <form method="get" class="filter-container">
+        <label for="mes">Mês:</label>
+        <select id="mes" name="mes">
+            {% for m in meses %}
+                <option value="{{ m }}" {% if m == mes %}selected{% endif %}>{{ m }}</option>
+            {% endfor %}
+        </select>
+    
+        <label for="ano">Ano:</label>
+        <input type="number" id="ano" name="ano" value="{{ ano }}" min="2000" max="{{ now.year }}">
+    
+        <button type="submit" class="btn-filtrar">Filtrar</button>
+    </form>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div class="grid-container">
+            <div class="grid-item">
+                <span>Idade:</span>
+                {{ idade }}
+            </div>
+            <div class="grid-item">
+                <span>Altura (cm):</span>
+                {{ form.altura }}
+            </div>
+            <div class="grid-item">
+                <span>Peso (kg):</span>
+                {{ form.peso }}
+            </div>
+            <div class="grid-item">
+                <span>IMC (kg/A²):</span>
+                <p class="imc-value">
+                    {{ dadobiometrico.imc|default:"-" }}
+                </p>
+            </div>
+            <div class="grid-item">
+                <span>Massa Gorda:</span>
+                {{ form.massa_gorda }}
+            </div>
+            <div class="grid-item">
+                <span>% Massa Muscular:</span>
+                {{ form.massa_muscular }}
+            </div>
+            <div class="grid-item">
+                <span>% Água:</span>
+                {{ form.agua }}
+            </div>
+            <div class="grid-item">
+                <span>Gordura Visceral (%):</span>
+                {{ form.gordura_visceral }}
+            </div>
+            <div class="grid-item">
+                <span>Idade Biológica:</span>
+                {{ form.idade_biologica }}
+            </div>
+            <div class="grid-item">
+                <span>Nível Físico:</span>
+                {{ form.nivel_fisico }}
+            </div>
+        </div>
+    
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Guardar Alterações</button>
+            <a href="{% url 'detalhe_utilizador' utilizador.id %}" class="btn-voltar">Voltar</a>
+        </div>
+    </form>
+
+</div>
+
+{% endblock %}

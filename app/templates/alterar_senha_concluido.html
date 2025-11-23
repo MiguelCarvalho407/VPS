@@ -1,0 +1,52 @@
+{% extends 'FC_APP/fcBase.html' %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        margin: 0;
+    }
+
+    .container {
+        background: #fff;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 25vh;
+    }
+
+    h2 {
+        color: #333;
+    }
+
+    .success-message {
+        color: #28a745;
+        font-weight: bold;
+    }
+
+    .link-home {
+        display: inline-block;
+        margin-top: 10px;
+        text-decoration: none;
+        color: #007bff;
+        font-weight: bold;
+    }
+
+    .link-home:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="container">
+    <h2>Password Alterada</h2>
+    <p class="success-message">A tua password foi alterada com sucesso!</p>
+    <a href="{% url 'calendario' %}" class="link-home">Voltar</a>
+</div>
+
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'FC_APP/fcBase.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Reservas Fechadas</h2>
+    <p>As reservas para este treino abrem às: {{ abertura_reservas|date:"H:i" }} do dia {{ abertura_reservas|date:"d/m/Y" }}.</p>
+    <br>
+    <a href="{% url 'calendario' %}" class="btn btn-primary">Voltar</a>
+</div>
+
+<style>
+    .container{
+        text-align: center;
+        margin-top: 5%;
+    }
+</style>
+
+{% endblock %}

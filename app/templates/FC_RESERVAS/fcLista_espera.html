@@ -1,0 +1,25 @@
+{% extends 'FC_APP/fcBase.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/fcReservas_detalhes.css' %}">
+
+<div class="container lista-espera-container">
+    <h3>Lista de Espera:</h3>
+    <ul class="lista-espera">
+        {% for espera in lista_espera %}
+            <li class="espera-item">
+                <div class="utilizador-info">
+                    <strong>{{ espera.utilizador.username }}:</strong> A aguardar!
+                </div>
+            </li>
+        {% empty %}
+            <li>Não há utilizadores na lista de espera.</li>
+        {% endfor %}
+    </ul>
+
+    <div class="voltar">
+        <a href="{% url 'calendario' %}" class="voltar-btn">Voltar</a>
+    </div>
+</div>
+{% endblock %}

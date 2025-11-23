@@ -1,0 +1,27 @@
+{% extends 'FC_APP/fcBase.html' %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/fcCartao.css' %}">
+
+
+<div class="cartao">
+    <img src="{% static 'imagens/fitclub1.png' %}">
+    <h2>{{ user.username }}</h2>
+    <hr>
+    <p>{% now "F Y" %}</p>  <!-- MOSTAO O MES E ANO ATUAL -->
+</div>
+
+<div class="parcerias-container">
+    <div class="parceria">
+        <img src="{% static 'imagens/physio_mondego.jpeg' %}">
+        <p><strong>PHYSIO MONDEGO! 🔥</strong><br>
+            - 20% de desconto em sessões de fisioterapia na unidade Physio Mondego.<br>
+            - Valor final: 20€ (desconto já aplicado).<br>
+            📍 Localização: Rua do Carmo, nº54, Coimbra.<br>
+            📲 Para marcações: 239094197 | 910167443</p>
+    </div>
+</div>
+
+{% endblock %}

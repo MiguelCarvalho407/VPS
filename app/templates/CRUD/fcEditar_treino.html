@@ -1,0 +1,80 @@
+{% extends 'FC_APP/fcBase.html' %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/fcEditar_treino.css' %}">
+
+<div class="training-container-alt">
+    <h1 class="titulo-alt">Editar Aula</h1>
+    <form method="post" class="form-horizontal">
+        {% csrf_token %}
+
+        <div class="form-row">
+            <div class="form-column">
+                <label for="data_inicio">{{ form.data_inicio.label }}</label>
+                {{ form.data_inicio }}
+            </div>
+
+            <div class="form-column">
+                <label for="data_fim">{{ form.data_fim.label }}</label>
+                {{ form.data_fim }}
+            </div>
+
+        </div>
+
+        <div class="form-row">
+            <div class="form-column">
+                <label for="hora_inicio">{{ form.hora_inicio.label }}</label>
+                {{ form.hora_inicio }}
+            </div>
+
+            <div class="form-column">
+                <label for="hora_fim">{{ form.hora_fim.label }}</label>
+                {{ form.hora_fim }}
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-column">
+                <label for="tipo_treino">{{ form.tipo_treino.label }}</label>
+                {{ form.tipo_treino }}
+            </div>
+
+            <div class="form-column">
+                <label for="max_participantes">{{ form.max_participantes.label }}</label>
+                {{ form.max_participantes }}
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-column">
+                <label for="dia_da_semana">{{ form.dia_da_semana.label }}</label>
+                {{ form.dia_da_semana }}
+            </div>
+
+            <div class="form-column">
+                <label for="max_lista_espera">{{ form.max_lista_espera.label }}</label>
+                {{ form.max_lista_espera }}
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-column">
+                <label for="hora_abertura_reservas">{{ form.reservas_horas_antes.label }}</label>
+                {{ form.reservas_horas_antes }}
+            </div>
+
+            <div class="form-column">
+                <label for="reservas_horas_fecho">{{ form.reservas_horas_fecho.label }}</label>
+                {{ form.reservas_horas_fecho }}
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-submit">Guardar Alterações</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

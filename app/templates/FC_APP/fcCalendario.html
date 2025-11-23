@@ -1,0 +1,226 @@
+{% extends 'FC_APP/fcBase.html' %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/calendario.css' %}">
+
+{% if messages %}
+<div class="message-container">
+    {% for message in messages %}
+    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+    // Esconde a mensagem após 5 segundos
+    setTimeout(function () {
+        document.querySelectorAll('.alert').forEach(function (msg) {
+            msg.style.transition = "opacity 0.5s ease"; // Animação suave
+            msg.style.opacity = "0"; // Torna invisível
+            setTimeout(() => msg.remove(), 500); // Remove do DOM após a animação
+        });
+    }, 5000);
+</script>
+{% endif %}
+
+<div class="calendar-container">
+    <div class="calendar-header">
+        <button id="prev">◀</button>
+        <h2 id="month-year"></h2>
+        <button id="next">▶</button>
+    </div>
+
+    <div class="weekdays">
+        <div>SEG</div>
+        <div>TER</div>
+        <div>QUA</div>
+        <div>QUI</div>
+        <div>SEX</div>
+        <div>SÁB</div>
+        <div>DOM</div>
+    </div>
+    <div id="days" class="days-grid"></div>
+    <br>
+    {% if request.user.is_staff %}
+    <a href="{% url 'criar_treino' %}" class="btn-criar-evento">Criar Evento</a>
+    <a href="{% url 'apagar_treinos_em_massa' %}" class="btn-apagar-treinos-massa">Apagar Eventos</a>
+    {% endif %}
+</div>
+
+<!-- Modal para detalhes do treino -->
+<div id="modal" class="modal hidden">
+    <div class="modal-content">
+        <button class="modal-close">&times;</button>
+        <h2 class="modal-title">Treinos do Dia</h2>
+        <div class="modal-body" id="modal-treinos-lista"></div>
+    </div>
+</div>
+
+<script>
+    let currentDate = new Date();
+    const daysContainer = document.getElementById("days");
+    const monthYearHeader = document.getElementById("month-year");
+    const prevButton = document.getElementById("prev");
+    const nextButton = document.getElementById("next");
+    const modal = document.getElementById("modal");
+    const closeModalButton = document.querySelector(".modal-close");
+    const modalTreinosLista = document.getElementById("modal-treinos-lista");
+
+    let treinos = [];  // Agora os treinos só vêm via AJAX
+
+    function openModal(treinosDoDia) {
+        modalTreinosLista.innerHTML = "";
+
+        treinosDoDia.sort((a, b) => a.hora_inicio.localeCompare(b.hora_inicio));
+
+        treinosDoDia.forEach(treino => {
+            const treinoDiv = document.createElement("div");
+            treinoDiv.classList.add("treino-item");
+            treinoDiv.innerHTML = `
+                <div>
+                    <strong>
+                        ${treino.tipo_treino_nome ? treino.tipo_treino_nome : treino.tipo_treino} 
+                        (${treino.hora_inicio} - ${treino.hora_fim})
+                    </strong>
+                    <button class="btn-ver-mais ${treino.user_reserved ? 'reservado' : ''}">Ver mais</button>
+                    ${treino.user_reserved
+                    ? `<a href="${treino.reservar_url}" class="cancelar-reserva">Cancelar Reserva</a>`
+                    : ``}
+                </div>
+
+                <div class="treino-detalhes hidden">
+                    <div class="detalhes-grid">
+                        <div class="detalhe-item">
+                            <span class="detalhe-label">Dia da Semana:</span>
+                            <span class="detalhe-valor">${new Date(treino.data_inicio).toLocaleDateString("pt-BR", { weekday: "long" })}</span>
+                        </div>
+                        <div class="detalhe-item">
+                            <span class="detalhe-label">Data:</span>
+                            <span class="detalhe-valor">${new Date(treino.data_inicio).toLocaleDateString("pt-BR")}</span>
+                        </div>
+                        <div class="detalhe-item">
+                            <span class="detalhe-label">Hora Início:</span>
+                            <span class="detalhe-valor">${treino.hora_inicio}</span>
+                        </div>
+                        <div class="detalhe-item">
+                            <span class="detalhe-label">Hora Fim:</span>
+                            <span class="detalhe-valor">${treino.hora_fim}</span>
+                        </div>
+                        <div class="detalhe-item">
+                            <span class="detalhe-label">Tipo de Treino:</span>
+                            <span class="detalhe-valor">${treino.tipo_treino_nome ? treino.tipo_treino_nome : treino.tipo_treino}</span>
+                        </div>
+                        <div class="detalhe-item">
+                            <span class="detalhe-label">Participantes:</span>
+                            <span class="detalhe-valor">${treino.reservados}/${treino.max_participantes}</span>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <a href="${treino.reservar_url}" id="reservar-link">
+                                ${treino.user_reserved ? "Cancelar Reserva" : "Reservar"}
+                        </a>
+                        <a href="${treino.detalhes_url}" id="detalhes-link">Detalhes</a>
+                        {% if request.user.is_staff %}
+                            <a href="/fitclub/editar_treino/${treino.id}/" id="editar-link">Editar</a>
+                            <a href="/fitclub/apagartreino/${treino.id}/" id="apagar-link">Cancelar</a>
+                        {% endif %}
+                    </div>
+                </div>
+            `;
+            treinoDiv.querySelector(".btn-ver-mais").addEventListener("click", () => {
+                treinoDiv.querySelector(".treino-detalhes").classList.toggle("hidden");
+            });
+            modalTreinosLista.appendChild(treinoDiv);
+        });
+        modal.classList.remove("hidden");
+    }
+
+    closeModalButton.addEventListener("click", () => {
+        modal.classList.add("hidden");
+    });
+
+    async function loadTreinos(year, month) {
+        const response = await fetch(`?year=${year}&month=${month}`, {
+            headers: { "x-requested-with": "XMLHttpRequest" }
+        });
+        treinos = await response.json();
+        renderCalendar();
+    }
+
+    function renderCalendar() {
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+        const firstDayOfMonth = new Date(year, month, 1).getDay();
+        const lastDateOfMonth = new Date(year, month + 1, 0).getDate();
+
+        monthYearHeader.textContent = currentDate.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+        daysContainer.innerHTML = "";
+
+        // Espaços em branco antes do 1º dia
+        for (let i = 0; i < (firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1); i++) {
+            daysContainer.innerHTML += '<div class="day empty"></div>';
+        }
+
+        // Dias do mês
+        for (let day = 1; day <= lastDateOfMonth; day++) {
+            const today = new Date().toDateString() === new Date(year, month, day).toDateString();
+            const dayElement = document.createElement("div");
+            dayElement.classList.add("day");
+            if (today) dayElement.classList.add("today");
+            dayElement.innerHTML = `<span>${day}</span>`;
+
+            const treinoDoDia = treinos.filter(t => {
+                const treinoDate = new Date(t.data_inicio);
+                return treinoDate.getDate() === day &&
+                    treinoDate.getMonth() === month &&
+                    treinoDate.getFullYear() === year;
+            });
+
+            if (treinoDoDia.length > 0) {
+                const verTreinoButton = document.createElement("button");
+                verTreinoButton.classList.add("btn-ver-treinos");
+                verTreinoButton.textContent = "Ver Treinos do Dia";
+                verTreinoButton.addEventListener("click", () => openModal(treinoDoDia));
+                dayElement.appendChild(verTreinoButton);
+            }
+            daysContainer.appendChild(dayElement);
+        }
+    }
+
+    nextButton.addEventListener("click", () => {
+        currentDate.setDate(1);
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        loadTreinos(currentDate.getFullYear(), currentDate.getMonth() + 1);
+    });
+
+    prevButton.addEventListener("click", () => {
+        currentDate.setDate(1);
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        loadTreinos(currentDate.getFullYear(), currentDate.getMonth() + 1);
+    });
+
+    // Carrega treinos do mês atual ao iniciar
+    loadTreinos(currentDate.getFullYear(), currentDate.getMonth() + 1);
+</script>
+
+
+<style>
+    .hidden {
+        display: none;
+    }
+
+    .treino-item {
+        margin-bottom: 10px;
+        padding: 5px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .treino-detalhes {
+        margin-top: 5px;
+    }
+</style>
+
+{% endblock %}

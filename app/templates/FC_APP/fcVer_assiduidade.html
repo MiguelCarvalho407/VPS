@@ -1,0 +1,63 @@
+{% extends 'FC_APP/fcBase.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/fcAssiduidade.css' %}">
+
+<div class="container">
+    <h1>Assiduidade - {{ utilizador.username }}</h1>
+
+    <form method="get" class="filter-form">
+        <label for="mes">Selecione o Mês:</label>
+        <select name="mes">
+            {% for i in meses %}
+            <option value="{{ i }}" {% if i == mes %}selected{% endif %}>
+                {{ i }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <label for="ano">Selecione o Ano:</label>
+        <input type="number" name="ano" value="{{ ano }}" min="2000" max="2100">
+
+        <button type="submit">Filtrar</button>
+    </form>
+
+    <h2>Estatísticas</h2>
+    <p>Total de Treinos: <span>{{ total_reservas }}</span></p>
+    <p>Total de Treinos Confirmados: <span>{{ total_reservas_confirmadas }}</span></p>
+    <p>Total de Treinos Não Confirmados: <span>{{ total_reservas_nao_confirmadas }}</span></p>
+    <p>Média Semanal de Frequência: <span>{{ media_semanal|floatformat:2 }}%</span></p>
+
+    <h2>Reservas</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Treino</th>
+                <th>Dia Semana</th>
+                <th>Data</th>
+                <th>Confirmado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reserva in reservas %}
+            <tr>
+                <td>{% if reserva.treino.tipo_treino_nome %}{{ reserva.treino.tipo_treino_nome.nome }}{% else %}{{ reserva.treino.get_tipo_treino_display }}{% endif %}</td>
+                <td>{{ reserva.treino.get_dia_da_semana_display }}</td>
+                <td>{{ reserva.treino.data_inicio|date:"d/m/Y" }}</td>
+                <td>
+                    {% if reserva.confirmado %}
+                        <span class="status-confirmado">Sim</span>
+                    {% else %}
+                        <span class="status-nao-confirmado">Não</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="form-actions">
+        <a href="{% url 'detalhe_utilizador' utilizador.id %}" class="btn-voltar">Voltar</a>
+    </div>
+</div>
+{% endblock %}

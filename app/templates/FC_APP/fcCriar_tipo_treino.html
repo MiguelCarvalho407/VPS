@@ -1,0 +1,26 @@
+{% extends 'FC_APP/fcBase.html' %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/fcRecordes.css' %}">
+
+<div class="container">
+    <h1>Criar Tipo de Treino Novo</h1>
+
+    <form method="post" class="record-form">
+        {% csrf_token %}
+        <div class="form-column">
+            <label for="data_fim">{{ form.nome.label }}</label>
+            {{ form.nome }}
+        </div>
+
+        <button type="submit" class="btn-submit">Criar novo tipo de treino</button>
+    </form>
+
+    <div class="button-container">
+        <a href="{% url 'criar_treino' %}" class="btn-back">Voltar</a>
+    </div>
+</div>
+
+{% endblock %}

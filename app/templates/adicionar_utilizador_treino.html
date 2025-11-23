@@ -1,0 +1,152 @@
+{% extends 'FC_APP/fcBase.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Adicionar Utilizador ao Treino: {{ treino.nome }}</h1>
+
+    <!-- Campo de pesquisa -->
+    <input type="text" id="searchInput" class="search-box" placeholder="Pesquisar utilizador..." onkeyup="filtrarUtilizadsores()">
+
+    <!-- Lista de usuários -->
+    <ul class="user-list" id="userList">
+        {% for usuario in usuarios %}
+        <li class="user-item">
+            <span class="user-name">{{ usuario.username }}</span>
+            <form method="post" class="add-form">
+                {% csrf_token %}
+                <input type="hidden" name="usuario_id" value="{{ usuario.id }}">
+                <button type="submit" class="btn-add">Adicionar</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <!-- Controles de Paginação -->
+    <div class="pagination">
+        <button onclick="mudarPagina(-1)" id="prevPage" disabled>&laquo; Anterior</button>
+        <span id="pageInfo"></span>
+        <button onclick="mudarPagina(1)" id="nextPage">&raquo; Próxima</button>
+    </div>
+</div>
+
+<style>
+    /* Estilos básicos */
+    .container {
+        width: 90%;
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 20px;
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
+
+    .search-box {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        margin-bottom: 15px;
+    }
+
+    .user-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .user-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #f9f9f9;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-add {
+        padding: 8px 12px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .btn-add:hover {
+        background-color: #0056b3;
+    }
+
+    .pagination {
+        margin-top: 20px;
+    }
+
+    .pagination button {
+        padding: 8px 12px;
+        border: 1px solid #007bff;
+        border-radius: 5px;
+        background: white;
+        color: #007bff;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .pagination button:hover {
+        background-color: #007bff;
+        color: white;
+    }
+
+</style>
+
+<script>
+    // Função para filtrar os utilizadores conforme o texto digitado
+    function filtrarUtilizadsores() {
+        let input = document.getElementById("searchInput").value.toLowerCase(); // Obtém o valor do campo de pesquisa
+        let usuarios = document.querySelectorAll(".user-item"); // Seleciona todos os itens da lista de utilizadores
+
+        usuarios.forEach(usuario => {
+            let nome = usuario.querySelector(".user-name").innerText.toLowerCase(); // Obtém o nome do utilizador
+            if (nome.includes(input)) {
+                usuario.style.display = "flex"; // Exibe o utilizador se o nome incluir o texto da pesquisa
+            } else {
+                usuario.style.display = "none"; // Oculta o utilizador se não corresponder
+            }
+        });
+    }
+
+    // Função para controlar a paginação dos utilizadores
+    let utilizadores = Array.from(document.querySelectorAll(".user-item")); // LISTA DOS UTILIZADORES
+    let itensPorPagina = 10;  // QUANTIDADE DE UTILIZADORES POR PÁGINA
+    let paginaAtual = 1;
+
+    function mostrarPagina() {
+        let inicio = (paginaAtual - 1) * itensPorPagina;
+        let fim = inicio + itensPorPagina;
+
+        utilizadores.forEach((usuario, index) => {
+            usuario.style.display = (index >= inicio && index < fim) ? "flex" : "none";
+        });
+
+        document.getElementById("pageInfo").innerText = `Página ${paginaAtual} de ${Math.ceil(utilizadores.length / itensPorPagina)}`;
+        
+        document.getElementById("prevPage").disabled = (paginaAtual === 1);
+        document.getElementById("nextPage").disabled = (paginaAtual >= Math.ceil(utilizadores.length / itensPorPagina));
+    }
+
+    function mudarPagina(direcao) {
+        paginaAtual += direcao;
+        mostrarPagina();
+    }
+
+    // Mostrar a primeira página ao carregar
+    mostrarPagina();
+</script>
+
+{% endblock %}

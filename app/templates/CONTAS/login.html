@@ -1,0 +1,53 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>FitClub</title>
+    <link rel="stylesheet" href="{% static 'css/fcLogin.css' %}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="login form">
+            <header>
+                <img src="{% static 'imagens/fitclub1.png' %}" class="header-logo">
+            </header>
+
+            <form method="post">
+                {% csrf_token %}
+                <input type="email" name="email" placeholder="Insere o teu email" required>
+                <input type="password" name="password" placeholder="Insere a tua password">
+
+                {% if form.non_field_errors %}
+                <div class="error">
+                    {% for error in form.non_field_errors %}
+                    <p style="color: red;">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <input type="submit" class="button" value="Login">
+            </form>
+
+            <div class="signup">
+                <span class="signup">Ainda não tem conta?
+                    <a href="{% url 'signup' %}">Criar Conta</a>
+                    <br>
+                    <a href="{% url 'password_reset' %}">Recuperar Password</a>
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

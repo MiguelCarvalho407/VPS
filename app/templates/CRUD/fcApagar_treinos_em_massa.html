@@ -1,0 +1,113 @@
+{% extends 'FC_APP/fcBase.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 style="text-align: center; margin-bottom: 20px;">Apagar Treinos</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            <label for="data_inicio">Data Início:</label>
+            <input type="date" id="data_inicio" name="data_inicio">
+        </div>
+        <div>
+            <label for="data_fim">Data Fim:</label>
+            <input type="date" id="data_fim" name="data_fim">
+        </div>
+        <div>
+            <label for="data_fim">Hora de Início:</label>
+            <input type="time" id="hora_inicio" name="hora_inicio">
+        </div>
+        <div>
+            <label for="tipo_treino">Tipo de Treino:</label>
+            <select id="tipo_treino" name="tipo_treino">
+                <option value="">Todos</option>
+                <option value="treino_funcional">Treino Funcional</option>
+                <option value="mobilidade">Mobilidade</option>
+                <option value="força">Força</option>
+                <option value="total_fit">Total FIT</option>
+            </select>
+        </div>
+        <div>
+            <label for="dia_da_semana">Dia da Semana:</label>
+            <select id="dia_da_semana" name="dia_da_semana">
+                <option value="">Todos</option>
+                <option value="segunda-feira">Segunda-feira</option>
+                <option value="terça-feira">Terça-feira</option>
+                <option value="quarta-feira">Quarta-feira</option>
+                <option value="quinta-feira">Quinta-feira</option>
+                <option value="sexta-feira">Sexta-feira</option>
+                <option value="sábado">Sábado</option>
+                <option value="domingo">Domingo</option>
+            </select>
+        </div>
+        <button type="submit">Apagar Treinos</button>
+    </form>
+</div>
+
+<style>
+    form {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    form div {
+        margin-bottom: 15px;
+    }
+
+    form label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+
+    form input[type="date"],
+    form select,
+    form button {
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    form button {
+        background-color: #007bff;
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        border: none;
+    }
+
+    form button:hover {
+        background-color: #0056b3;
+    }
+
+    @media (max-width: 768px) {
+        form {
+            padding: 15px;
+        }
+
+        form label {
+            font-size: 13px;
+        }
+
+        form input[type="date"],
+        form select,
+        form button {
+            font-size: 13px;
+            padding: 8px;
+        }
+    }
+</style>
+
+
+
+{% endblock %}

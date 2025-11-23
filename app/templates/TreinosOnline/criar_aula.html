@@ -1,0 +1,100 @@
+{% extends 'FC_APP/fcBase.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .criar-treino-container {
+        max-width: 600px;
+        margin: 60px auto;
+        padding: 30px;
+        background-color: #ffffff;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 16px;
+    }
+
+    .criar-treino-container h2 {
+        text-align: center;
+        color: #11101b;
+        margin-bottom: 25px;
+    }
+
+    .criar-treino-form label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        color: #333;
+        margin-top: 16px;
+    }
+
+    .criar-treino-form input,
+    .criar-treino-form select,
+    .criar-treino-form textarea {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        background-color: #fefefe;
+        font-size: 15px;
+        transition: border-color 0.2s ease;
+    }
+
+    .criar-treino-form input:focus,
+    .criar-treino-form select:focus,
+    .criar-treino-form textarea:focus {
+        border-color: #11101b;
+        outline: none;
+    }
+
+    .criar-treino-form button {
+        margin-top: 25px;
+        width: 100%;
+        padding: 12px;
+        background-color: #11101b;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+    .criar-treino-form button:hover {
+        background-color: #333;
+    }
+
+    @media (max-width: 600px) {
+        .criar-treino-container {
+            margin: 30px 15px;
+            padding: 20px;
+        }
+
+        .criar-treino-form button {
+            font-size: 15px;
+        }
+    }
+</style>
+
+<div class="criar-treino-container">
+    <h2>Criar Treino Online</h2>
+    <form method="post" enctype="multipart/form-data" class="criar-treino-form">
+        {% csrf_token %}
+
+        <label for="titulo">Título:</label>
+        {{ form.titulo }}
+
+        <label for="descricao">Descrição:</label>
+        {{ form.descricao }}
+
+        <label for="thumbnail">Thumbnail:</label>
+        {{ form.thumbnail }}
+
+        <label for="tipo_treino">Tipo de Treino:</label>
+        {{ form.tipo_treino }}
+
+        <label for="link_yt">Link do YouTube:</label>
+        {{ form.link_yt }}
+
+        <button type="submit">Criar Treino Online</button>
+    </form>
+</div>
+{% endblock %}

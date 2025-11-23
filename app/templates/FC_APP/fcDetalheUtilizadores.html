@@ -1,0 +1,134 @@
+{% extends 'FC_APP/fcBase.html' %}
+{% load static %}
+
+{% block content %}
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="{% static 'css/fcDetalheUtilizadores.css' %}">
+
+<div class="user-info-container">
+    <h1>Informações Pessoais - {{ perfil.username }}</h1>
+    <div class="perfil-grid">
+        <div class="perfil-group">
+            <label for="">Nome:</label>
+            {{ perfil.username }}
+        </div>
+        <div class="perfil-group">
+            <label for="">Email:</label>
+            {{ perfil.email }}
+        </div>
+        <div class="perfil-group">
+            <label for="">Data Nascimento:</label>
+            {{ perfil.data_nascimento }}
+        </div>
+        <div class="perfil-group">
+            <label for="">Contacto:</label>
+            {{ perfil.contacto }}
+        </div>
+        <div class="perfil-group">
+            <label for="">Morada:</label>
+            {{ perfil.morada }}
+        </div>
+        <div class="perfil-group">
+            <label for="">Localidade:</label>
+            {{ perfil.localidade }}
+        </div>
+        <div class="perfil-group">
+            <label for="">Codigo Postal:</label>
+            {{ perfil.codigo_postal }}
+        </div>
+        <div class="perfil-group">
+            <label for="">Género:</label>
+            {{ perfil.genero }}
+        </div>
+        
+        <div class="perfil-group">
+            <label for="">NIF:</label>
+            {{ perfil.nif }}
+        </div>
+        <div class="perfil-group">
+            <label for="">Pretende Recibo:</label>
+            {{ perfil.get_pretende_recibo_display }}
+        </div>
+        <div class="perfil-group">
+            <label for="">Profissão:</label>
+            {{ perfil.profissao }}
+        </div>
+        <div class="perfil-group">
+            <label for="">Classificação do Esforço na Profissão:</label>
+            {{ perfil.get_classificacao_esforco_na_profissao_display }}
+        </div>
+        <div class="perfil-group">
+            <label for="">Fumador:</label>
+            {{ perfil.get_fumador_display }}
+        </div>
+        <div class="perfil-group">
+            <label for="">Problemas de Saúde:</label>
+            {{ perfil.get_problemas_saude_display }}
+        </div>
+        <div class="perfil-group">
+            <label for="">Limitações para a Prática de Exercício Físico:</label>
+            {{ perfil.get_limitacoes_para_pratica_exercicio_fisico_display }}
+        </div>
+        <div class="perfil-group">
+            <label for="">Como tiveste conhecimento da existência do FITCLUB:</label>
+            {{ perfil.get_como_teve_conhecimento_existencia_fitclub_display }}
+        </div>
+        <div class="perfil-group">
+            <label for="">Estado da conta:</label>
+            {{ perfil.funcao }}
+        </div>
+        <div class="perfil-group">
+            <label for="">Permissões de Treinador:</label>
+            {{ perfil.is_staff|yesno:"Sim,Não" }}
+        </div>
+        <div class="perfil-group">
+            <label for="">Regime:</label>
+            {{ perfil.get_regime_display }}
+        </div>
+    </div>
+
+    <div class="button-group">
+        {% if request.user.is_staff %}
+            <a href="{% url 'editar_utilizador' perfil.id %}" class="btn-primary">Editar Informações</a>
+            <a href="{% url 'editardadosbiometricos' perfil.id %}" class="btn-secondary">Dados Biométricos</a>
+            <a href="{% url 'ver_recordes_utilizador' perfil.id %}" class="btn-recordes">Recordes</a>
+            <a href="{% url 'verassiduidade' perfil.id %}" class="btn-assiduidade">Assiduidade</a>
+
+            <form method="POST" action="{% url 'apagarconta' perfil.id %}" class="remover-form">
+                {% csrf_token %}
+                <button type="button" class="btn-apagar-conta remover-utilizador-btn">Apagar Conta</button>
+            </form>
+        {% endif %}
+        <a href="{% url 'membros' %}" class="btn-voltar">Voltar à Lista</a>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const removerBotoes = document.querySelectorAll(".remover-utilizador-btn");
+
+        removerBotoes.forEach(botao => {
+            botao.addEventListener("click", function() {
+                Swal.fire({
+                    title: "Confirmar?",
+                    text: "Esta ação excluirá a conta permanentemente!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Sim, excluir!",
+                    cancelButtonText: "Cancelar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.closest(".remover-form").submit();
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+
+{% endblock %}

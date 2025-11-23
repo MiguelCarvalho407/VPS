@@ -1,0 +1,133 @@
+/* fcAssiduidade.css */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    color: #444;
+}
+
+h1 {
+    border-bottom: 3px solid #007bff;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+}
+
+.filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    background-color: #f1f1f1;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.filter-form label {
+    font-weight: bold;
+}
+
+.filter-form select,
+.filter-form input {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.filter-form button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 40%;
+}
+
+.filter-form button:hover {
+    background-color: #007bff;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th,
+table td {
+    padding: 12px 15px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background-color: #007bff;
+    color: white;
+    text-transform: uppercase;
+}
+
+table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+p {
+    font-size: 1rem;
+    margin: 10px 0;
+    color: #555;
+}
+
+p span {
+    font-weight: bold;
+}
+
+.btn-voltar{
+    display: flex;
+    margin-top: 1%;
+    width: 100%;
+    background-color: #4b5563;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .filter-form {
+        flex-direction: column;
+    }
+
+    table {
+        font-size: 0.9rem;
+    }
+
+    table th,
+    table td {
+        padding: 8px;
+    }
+}

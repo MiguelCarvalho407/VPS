@@ -1,0 +1,6 @@
+{% extends 'FC_APP/fcBase.html' %}
+{% block content %}
+    <h2>Não é possível realizar a reserva</h2>
+    <p>O treino para o qual estás a tentar reservar já passou da hora de início.</p>
+    <a href="{% url 'calendario' %}">Voltar ao calendário</a>
+{% endblock %}

@@ -1,0 +1,200 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+}
+
+.table {
+    width: 60%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.table thead {
+    background-color: #0a60bb;
+    color: white;
+}
+
+.table thead th {
+    padding: 10px;
+    text-align: left;
+    font-size: 1rem;
+}
+
+.table tbody tr {
+    border-bottom: 1px solid #ddd;
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.table tbody td {
+    padding: 10px;
+    text-align: left;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.table tbody td a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+.table tbody td a:hover {
+    text-decoration: underline;
+}
+
+.informacoes-totais-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.btn-informacoes-totais {
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #28a745;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    margin-bottom: 5%;
+}
+
+
+
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.pagination a {
+    padding: 5px 15px;
+    text-decoration: none;
+    background: #007bff;
+    color: white;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.pagination span {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 10px;
+}
+
+.barra{
+    display: flex;
+    justify-content: center;
+}
+
+.search-box {
+    width: 25%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.descarregar-assiduidade {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: -50px;
+}
+
+.form-assiduidade {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.btn-assiduidade{
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #0a53be;
+    cursor: pointer;
+}
+
+@media (max-width: 1250px) {
+        .descarregar-assiduidade {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin-top: -20px;
+    }
+}
+
+
+@media (max-width: 600px) {
+    .table {
+        width: 100%;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .table thead th, .table tbody td {
+        font-size: 0.85rem;
+        padding: 8px;
+    }
+
+    .pagination {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .pagination a {
+        width: 75%; /* Ocupa toda a largura disponível */
+        text-align: center;
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    .pagination span {
+        font-size: 14px;
+    }
+
+    .descarregar-assiduidade{
+        text-align: center;
+        margin-top: 10px;
+    }
+}

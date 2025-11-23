@@ -1,0 +1,135 @@
+{% extends 'FC_APP/fcBase.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/fcReservas_detalhes.css' %}">
+
+<!-- Biblioteca SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<div class="container reservas-container">
+    <h3>Reservas:</h3>
+    <ul class="reservas-lista">
+        {% for reserva in reservas %}
+        <li class="reserva-item">
+            <div class="utilizador-info">
+                <strong>{{ reserva.utilizador.username }}</strong>
+                {% if reserva.confirmado == True %}
+                <span class="status-text presente-text">- Presente</span>
+                {% elif reserva.confirmado == False %}
+                <span class="status-text ausente-text">- Ausente</span>
+                {% else %}
+                <span class="status-text pendente-text">- Inscrito</span>
+                {% endif %}
+            </div>
+
+            {% if request.user.is_staff %}
+            <form method="POST" action="{% url 'reservas_detalhes' treino_id=treino.id %}" class="remover-form">
+                {% csrf_token %}
+                <input type="hidden" name="reservas_id" value="{{ reserva.id }}">
+                <button type="submit" name="action" value="presente" class="presente-btn">Presente</button>
+                <button type="submit" name="action" value="ausente" class="ausente-btn">Ausente</button>
+                <button type="button" name="action" value="remover_reserva"
+                    class="remover-btn remover-utilizador-btn">Remover</button>
+            </form>
+            {% endif %}
+        </li>
+        {% empty %}
+        <li>Não há reservas para este treino.</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Lista de Espera:</h3>
+    <ul class="lista-espera">
+        {% for espera in lista_espera %}
+        <li class="espera-item">
+            <div class="utilizador-info">
+                <strong>{{ espera.utilizador.username }}:</strong> A aguardar!
+            </div>
+
+            <form method="POST" action="{% url 'cancelar_lista_espera' treino.id %}" class="remover-form">
+                {% csrf_token %}
+                <input type="hidden" name="espera_id" value="{{ espera.id }}">
+                {% if request.user.is_staff %}
+                <button type="button" class="remover-btn remover-utilizador-btn">Remover</button>
+                {% elif espera.utilizador == request.user %}
+                <button type="submit" class="remover-btn">Sair da Lista de Espera</button>
+                {% endif %}
+            </form>
+        </li>
+        {% empty %}
+        <li>Não há utilizadores na lista de espera.</li>
+        {% endfor %}
+    </ul>
+
+    <div class="voltar">
+        {% if request.user.is_staff %}
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="confirmar_todos">
+                <button type="submit" class="btn-success">Marcar todos presente</button>
+            </form>
+
+            <a href="{% url 'adicionar_utilizador_treino' treino.id %}" class="adicionar-utilizador-btn">Adicionar Utilizador</a>
+        {% endif %}
+        <a href="{% url 'calendario' %}" class="voltar-btn">Voltar</a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const removerBotoes = document.querySelectorAll(".remover-utilizador-btn");
+        const sairListaBotoes = document.querySelectorAll(".remover-btn:not(.remover-utilizador-btn)");
+
+        // Para remover utilizadores (apenas is_staff)
+        removerBotoes.forEach(botao => {
+            botao.addEventListener("click", function (event) {
+                event.preventDefault();
+                Swal.fire({
+                    title: "Confirmar remoção?",
+                    text: "Esta ação removerá o aluno da lista.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Sim, remover!",
+                    cancelButtonText: "Cancelar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        let form = this.closest(".remover-form");
+                        let actionInput = document.createElement("input");
+                        actionInput.type = "hidden";
+                        actionInput.name = "action";
+                        actionInput.value = "remover_reserva";
+                        form.appendChild(actionInput);
+                        form.submit();
+                    }
+                });
+            });
+        });
+
+        // Para o próprio utilizador sair da lista de espera
+        sairListaBotoes.forEach(botao => {
+            botao.addEventListener("click", function (event) {
+                event.preventDefault();
+                Swal.fire({
+                    title: "Confirmar?",
+                    text: "Tens a certeza que queres sair da lista de espera?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Sim, sair!",
+                    cancelButtonText: "Cancelar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.closest(".remover-form").submit();
+                    }
+                });
+            });
+        });
+    });
+
+</script>
+
+{% endblock %}

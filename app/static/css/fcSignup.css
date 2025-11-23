@@ -1,0 +1,120 @@
+/* signup_login.css */
+
+/* Reset básico */
+body, h1, h2, h3, p, div, span, img, a, input, button, form, label {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background-color: #f9f9f9;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Container principal */
+.container {
+  width: 100%;
+  max-width: 900px;
+  background: #eee;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo geral do formulário */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.header-logo {
+  display: block;
+  margin: 0 auto 20px;
+  max-width: 200px;
+}
+
+/* Grid para os campos do formulário */
+.form-container-login {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.inputBox {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.inputBox label {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.inputBox input,
+.inputBox select,
+.inputBox textarea {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 100%;
+}
+
+/* Estilo do botão */
+.button {
+  grid-column: 1 / -1;
+  background: #FF4B2B;
+  color: #fff;
+  font-size: 16px;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.3s;
+}
+
+.button:hover {
+  background: #c73116;
+}
+
+/* Link de redirecionamento */
+.signup {
+  grid-column: 1 / -1;
+  text-align: center;
+}
+
+.signup a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.signup a:hover {
+  text-decoration: underline;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .form-container-login {
+      grid-template-columns: 1fr;
+  }
+
+  .header-logo {
+      max-width: 100px;
+  }
+
+  .button {
+      font-size: 14px;
+      padding: 10px;
+  }
+}

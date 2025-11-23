@@ -1,0 +1,92 @@
+{% extends 'FC_APP/fcBase.html' %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/fcMembros.css' %}">
+
+<h1>Membros</h1>
+
+<div class="barra">
+    <input type="text" id="searchInput" name="q" value="{{ query }}" placeholder="Procurar membro..." class="search-box">
+</div>
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nome</th>
+            {% if request.user.is_staff %}
+                <th scope="col">Email</th>
+                <th scope="col">Ações</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for utilizador in page_obj %}
+        <tr>
+            <th>{{ utilizador.id }}</th>
+            <td>{{ utilizador.username }}</td>
+            {% if request.user.is_staff %}
+                <td>{{ utilizador.email}}</td>
+                <td><a href="{% url 'detalhe_utilizador' utilizador.id %}">Ver mais</a></td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?q={{ query }}&page=1">« Primeira</a>
+        <a href="?q={{ query }}&page={{ page_obj.previous_page_number }}">‹ Anterior</a>
+    {% endif %}
+
+    <span>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+
+    {% if page_obj.has_next %}
+        <a href="?q={{ query }}&page={{ page_obj.next_page_number }}">Próxima ›</a>
+        <a href="?q={{ query }}&page={{ page_obj.paginator.num_pages }}">Última »</a>
+    {% endif %}
+</div>
+
+{% if request.user.is_staff %}
+    <div class="informacoes-totais-container">
+        <a href="{% url 'exportar_excel' %}" class="btn-informacoes-totais">Descarregar Informações Totais</a>
+    </div>
+
+    <div class="descarregar-assiduidade">
+        <form method="get" action="{% url 'exportar_assiduidade_estatisticas' %}" class="form-assiduidade">
+            <!-- <label for="mes-estatisticas">Mês:</label> -->
+            <input type="month" id="mes-estatisticas" name="mes" required>
+            <button type="submit" class="btn-assiduidade">Descarregar Assiduidade</button>
+        </form>
+    </div>
+    
+{% endif %}
+
+
+<script>
+    document.getElementById("searchInput").addEventListener("keyup", function() {
+        let query = this.value;
+        let url = new URL(window.location.href);
+        url.searchParams.set("q", query);  // Atualiza a URL com a query
+        url.searchParams.set("page", 1);  // Sempre volta para a página 1 ao pesquisar
+        
+        fetch(url)  // Faz a requisição para o servidor
+            .then(response => response.text())
+            .then(data => {
+                let parser = new DOMParser();
+                let newDocument = parser.parseFromString(data, "text/html");
+                let newTable = newDocument.querySelector("table");
+                let newPagination = newDocument.querySelector(".pagination");
+
+                document.querySelector("table").innerHTML = newTable.innerHTML;  // Atualiza a tabela
+                document.querySelector(".pagination").innerHTML = newPagination.innerHTML;  // Atualiza a paginação
+            });
+    });
+</script>
+
+{% endblock %}

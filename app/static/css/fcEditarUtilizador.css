@@ -1,0 +1,129 @@
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/* fcEditarUtilizador.css */
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+}
+
+.edit-user-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.titulo {
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.edit-user-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Layout dos campos */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Botões */
+.button-group {
+    margin-top: 5%;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-secondary {
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #28a745;
+    transition: all 0.3s ease;
+}
+
+.btn-voltar {
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #4b5563;
+    transition: all 0.3s ease;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .button-group a,
+    .button-group button {
+        width: 100%;
+        text-align: center;
+    }
+}
