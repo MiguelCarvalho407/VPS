@@ -80,8 +80,12 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'fitclubns17',
+        'USER': 'fitclubns17_db',
+        'PASSWORD': 'oZ7RKyjhEZxEKklZB531o',
+        'HOST': '65.108.214.207',
+        'PORT': '3306',
     }
 }
 
