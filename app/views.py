@@ -59,6 +59,9 @@ def signup(request):
                     problemas_saude=form.cleaned_data['problemas_saude'],
                     limitacoes_para_pratica_exercicio_fisico=form.cleaned_data['limitacoes_para_pratica_exercicio_fisico'],
                     como_teve_conhecimento_existencia_fitclub=form.cleaned_data['como_teve_conhecimento_existencia_fitclub'],
+                    altura=form.cleaned_data['altura'],
+                    codigo_postal=form.cleaned_data['codigo_postal'],
+                    localidade=form.cleaned_data['localidade'],
                 )
                 utilizador.save()
 
@@ -364,6 +367,8 @@ def criar_treinos(request):
 def definicoes(request):
     if request.user.funcao != 'Ativo':
         return redirect('acesso_negado')
+    
+    regime = request.user.get_regime_display()
 
     if request.method == 'POST':
         form = InformacoesPessoaisForm(request.POST, request.FILES, instance=request.user)
@@ -374,7 +379,7 @@ def definicoes(request):
     else:
         form = InformacoesPessoaisForm(instance=request.user)
 
-    return render(request, 'FC_APP/fcDefinicoes.html', {'form': form})
+    return render(request, 'FC_APP/fcDefinicoes.html', {'form': form, 'regime': regime})
 
 
 
@@ -437,6 +442,8 @@ def dadosbiometricos(request):
     ano = int(request.GET.get('ano', datetime.now().year))
     mes = int(request.GET.get('mes', datetime.now().month))
 
+    altura = request.user.altura
+
     dados_biometricos = Dados_biometricos.objects.filter(
         utilizador=request.user,
         data_registo__year=ano,
@@ -460,7 +467,7 @@ def dadosbiometricos(request):
         if form.is_valid():
             novo_dado = form.save(commit=False)
             novo_dado.utilizador = request.user
-            novo_dado.data_registo = datetime(ano, mes, 1)
+            # novo_dado.data_registo = datetime(ano, mes, 1)
             novo_dado.save()
             return redirect('dadosbiometricos')
         else:
@@ -481,6 +488,7 @@ def dadosbiometricos(request):
             'mes': mes,
             'meses': meses,
             'idade': idade,
+            'altura': altura,
         }
     )
 
@@ -497,6 +505,9 @@ def editardadosbiometricos(request, user_id):
 
     # VAI BUSCAR O UTILIZADOR PARA NO HTML APARECER O NOME DE UTILIZADOR QUE ESTOU A EDITAR
     utilizador = Utilizadores.objects.get(id=user_id)
+
+    #IR BUSCAR A ALTURA À OUTRA TABELA
+    altura = utilizador.altura
 
     # Filtra os dados biométricos com base no mês, ano e utilizador
     dadobiometrico = Dados_biometricos.objects.filter(
@@ -573,6 +584,7 @@ def editardadosbiometricos(request, user_id):
             'reservas': reservas,
             'assiduidade_url': reverse('verassiduidade', kwargs={'user_id': user_id}),
             'idade': idade,
+            'altura': altura,
         },
     )
 

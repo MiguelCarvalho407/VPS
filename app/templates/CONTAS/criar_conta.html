@@ -83,6 +83,30 @@
                 </div>
 
                 <div class="inputBox">
+                    <label for="nif">Altura:</label>
+                    {{ form.altura }}
+                    {% for error in form.altura.errors %}
+                        <span class="text-danger" style="color: red;">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="inputBox">
+                    <label for="nif">Localidade:</label>
+                    {{ form.localidade }}
+                    {% for error in form.localidade.errors %}
+                        <span class="text-danger" style="color: red;">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="inputBox">
+                    <label for="nif">Código Postal:</label>
+                    {{ form.codigo_postal }}
+                    {% for error in form.codigo_postal.errors %}
+                        <span class="text-danger" style="color: red;">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="inputBox">
                     <label for="pretende_recibo">Pretende Recibo:</label>
                     {{ form.pretende_recibo }}
                     {% for error in form.pretende_recibo.errors %}
@@ -131,7 +155,7 @@
                 </div>
                 
                 <div class="inputBox">
-                    <label for="genero">Como tiveste conhecimento da existência do FITCLUB:</label>
+                    <label for="genero">O que te levou a inscreveste-te no FITCLUB:</label>
                     {{ form.como_teve_conhecimento_existencia_fitclub }}
                     {% for error in form.como_teve_conhecimento_existencia_fitclub.errors %}
                         <span class="text-danger" style="color: red;">{{ error }}</span>

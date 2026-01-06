@@ -51,10 +51,9 @@ class Utilizadores(AbstractUser):
     CONHECIMENTO_FITCLUB = (
         ('atraves_familiares', 'Através de Familiares'),
         ('atraves_amigos', 'Através de Amigos'),
-        ('atraves_panfleto', 'Através de Panfleto/Cartaz'),
-        ('atraves_facebook', 'Através de Página Facebook'),
-        ('atraves_instagram', 'Através de Instagram'),
-        ('atraves_whatsapp', 'Através de Grupo WhatsApp'),
+        ('atraves_redes_sociais', 'Através das Redes Sociais'),
+        ('atraves_outdoors_flyers', 'Através de Outdoors/Flyers'),
+        ('recomendacao_medica', 'Recomendação Médica')
     )
 
     REGIME_CHOICES = (
@@ -82,6 +81,7 @@ class Utilizadores(AbstractUser):
     funcao = models.CharField(max_length=20, choices=FUNCAO_CHOICES, default='Ativo')
     regime = models.CharField(max_length=30, choices=REGIME_CHOICES, null=True, blank=True)
     regime_data = models.DateField(blank=True, null=True)
+    altura = models.IntegerField(null=True)
 
     # OUTRAS INFORMAÇÕES
     nif = models.IntegerField()
@@ -145,7 +145,7 @@ class Utilizadores(AbstractUser):
 
 class Dados_biometricos(models.Model):
     idade = models.IntegerField(null=True, blank=True)  # Inteiro para idade
-    altura = models.IntegerField(null=True, blank=True)  # Decimal para manter precisão
+    # altura = models.IntegerField(null=True, blank=True)  # Decimal para manter precisão
     peso = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     imc = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True, editable=False)
     massa_gorda = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
@@ -167,8 +167,10 @@ class Dados_biometricos(models.Model):
 
     def save(self, *args, **kwargs):
         # CALCULAR O IMC
-        if self.altura and self.peso:
-            self.imc = round(self.peso / (Decimal(self.altura) / Decimal(100)) ** 2, 2)  # CONVERTE ALTURA PARA METROS
+        if self.peso and self.utilizador.altura:
+            altura_metros = Decimal(self.utilizador.altura) / Decimal(100)
+            if altura_metros > 0:
+                self.imc = round(self.peso / (altura_metros ** 2), 2)  # CONVERTE ALTURA PARA METROS
         super().save(*args, **kwargs)
 
 

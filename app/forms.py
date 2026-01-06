@@ -68,6 +68,17 @@ class CriarContaForm(forms.Form):
     como_teve_conhecimento_existencia_fitclub = forms.ChoiceField(choices=Utilizadores.CONHECIMENTO_FITCLUB, widget=forms.Select(attrs={
         'class':'form-control'
     }))
+    altura = forms.IntegerField(widget=forms.NumberInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Exemplo: 180'
+    }))
+    codigo_postal = forms.CharField(max_length=8, widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': '0000-000',
+    }))
+    localidade = forms.CharField(max_length=155, widget=forms.TextInput(attrs={
+        'class': 'form-control'
+    }))
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -143,10 +154,24 @@ class AlterarSenhaForm(PasswordChangeForm):
 
 
 class InformacoesPessoaisForm(forms.ModelForm):
+    codigo_postal = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': '0000-000'
+        })
+    )
+    localidade = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control'
+        })
+    )
+
     class Meta:
         model = Utilizadores
-        fields = ['email', 'username', 'data_nascimento', 'genero', 'morada', 'codigo_postal', 'localidade', 'contacto',
-                  'nif', 'pretende_recibo', 'profissao', 'classificacao_esforco_na_profissao', 'fumador', 'problemas_saude', 'limitacoes_para_pratica_exercicio_fisico', 'como_teve_conhecimento_existencia_fitclub', 'regime']
+        fields = ['email', 'username', 'data_nascimento', 'altura', 'genero', 'morada', 'codigo_postal', 'localidade', 'contacto',
+                  'nif', 'pretende_recibo', 'profissao', 'classificacao_esforco_na_profissao', 'fumador', 'problemas_saude', 'limitacoes_para_pratica_exercicio_fisico', 'como_teve_conhecimento_existencia_fitclub']
         widgets = {
             'email':forms.EmailInput(attrs={
                 'readonly': 'readonly'
@@ -154,10 +179,6 @@ class InformacoesPessoaisForm(forms.ModelForm):
             'data_nascimento':forms.DateInput(attrs={
                 'class': 'form-control',
                 'type': 'date',
-            }),
-            'codigo_postal': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': '0000-000',
             }),
             'contacto': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -167,17 +188,15 @@ class InformacoesPessoaisForm(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': 'Escreva a sua morada'
             }),
-            'regime':forms.TextInput(attrs={
-                'readonly': 'readonly'
-            }),
+
 
         }
         labels = {
             'username': ('Nome'),
             'data_nascimento': ('Data de Nascimento'),
             'morada': ('Morada (Opcional)'),
-            'codigo_postal': ('Código Postal (Opcional)'),
-            'localidade': ('Localidade (Opcional)'),
+            'codigo_postal': ('Código Postal'),
+            'localidade': ('Localidade'),
             'contacto': ('Contacto'),
             'genero': ('Género'),
         }
@@ -242,7 +261,7 @@ class DadosBiometricosForm(forms.ModelForm):
     altura = forms.IntegerField(
         min_value=100, max_value=299,  # Altura entre 100 e 299 cm
         widget=forms.NumberInput(attrs={'step': '1'}),
-        required=True
+        required=False
     )
     peso = forms.DecimalField(
         max_digits=5, decimal_places=2,
@@ -272,16 +291,10 @@ class DadosBiometricosForm(forms.ModelForm):
         max_digits=5, decimal_places=2,
         widget=forms.NumberInput(attrs={'step': '0.01', 'readonly': 'readonly'}), required=False
     )
-
-    def clean_altura(self):
-        altura = self.cleaned_data.get('altura')
-        if altura and (altura < 100 or altura > 299):  # Garante que tenha 3 dígitos
-            raise forms.ValidationError("A altura deve ter exatamente 3 dígitos (ex: 160 cm).")
-        return altura
     
     def clean(self):
         cleaned_data = super().clean()
-        decimal_fields = ['peso', 'massa_gorda', 'massa_muscular', 'agua', 'gordura_visceral', 'idade_biologica', 'nivel_fisico']
+        decimal_fields = ['peso', 'gordura_visceral']
         
         for field in decimal_fields:
             if cleaned_data.get(field) == '':
@@ -291,25 +304,26 @@ class DadosBiometricosForm(forms.ModelForm):
 
     class Meta:
         model = Dados_biometricos
-        fields = ['idade', 'altura', 'peso', 'massa_gorda', 'massa_muscular', 'agua', 'gordura_visceral', 'idade_biologica', 'nivel_fisico']
+        fields = ['idade', 'altura', 'peso', 'gordura_visceral']
         widgets = {
             'idade': forms.NumberInput(attrs={'readonly': 'readonly'}),
+            'altura': forms.NumberInput(attrs={'readonly': 'readonly'}),
         }
 
 
 class EditarDadosBiometricos(forms.ModelForm):
-    altura = forms.DecimalField(max_digits=5, decimal_places=2, widget=forms.NumberInput(attrs={'step': '0.01'}))
+    altura = forms.DecimalField(max_digits=5, decimal_places=2, required=False, widget=forms.NumberInput(attrs={'readonly': 'readonly'}))
     peso = forms.DecimalField(max_digits=5, decimal_places=2, widget=forms.NumberInput(attrs={'step': '0.01'}))
-    massa_gorda = forms.DecimalField(max_digits=5, decimal_places=2, widget=forms.NumberInput(attrs={'step': '0.01'}))
-    massa_muscular = forms.DecimalField(max_digits=5, decimal_places=2, widget=forms.NumberInput(attrs={'step': '0.01'}))
-    agua = forms.DecimalField(max_digits=5, decimal_places=2, widget=forms.NumberInput(attrs={'step': '0.01'}))
+    # massa_gorda = forms.DecimalField(max_digits=5, decimal_places=2, widget=forms.NumberInput(attrs={'step': '0.01'}))
+    # massa_muscular = forms.DecimalField(max_digits=5, decimal_places=2, widget=forms.NumberInput(attrs={'step': '0.01'}))
+    # agua = forms.DecimalField(max_digits=5, decimal_places=2, widget=forms.NumberInput(attrs={'step': '0.01'}))
     gordura_visceral = forms.DecimalField(max_digits=5, decimal_places=2, widget=forms.NumberInput(attrs={'step': '0.01'}))
-    idade_biologica = forms.DecimalField(max_digits=5, decimal_places=2, widget=forms.NumberInput(attrs={'step': '1'}))
-    nivel_fisico = forms.DecimalField(max_digits=5, decimal_places=2, widget=forms.NumberInput(attrs={'step': '0.01'}))
+    # idade_biologica = forms.DecimalField(max_digits=5, decimal_places=2, widget=forms.NumberInput(attrs={'step': '1'}))
+    # nivel_fisico = forms.DecimalField(max_digits=5, decimal_places=2, widget=forms.NumberInput(attrs={'step': '0.01'}))
 
     class Meta:
         model = Dados_biometricos
-        fields = ['idade', 'altura', 'peso', 'massa_gorda', 'massa_muscular', 'agua', 'gordura_visceral', 'idade_biologica', 'nivel_fisico']
+        fields = ['idade', 'peso', 'gordura_visceral']
         widgets = {
             'idade': forms.NumberInput(attrs={'readonly': 'readonly'}),
         }

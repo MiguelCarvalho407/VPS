@@ -40,6 +40,11 @@
             </div>
 
             <div class="form-group">
+                {{ form.altura.label_tag }}
+                {{ form.altura }}
+            </div>
+
+            <div class="form-group">
                 {{ form.contacto.label_tag }}
                 {{ form.contacto }}
             </div>
@@ -100,13 +105,13 @@
             </div>
 
             <div class="form-group">
-                <label for="">Como tiveste conhecimento da existência do FITCLUB:</label>
+                <label for="">O que te levou a inscreveste-te no FITCLUB:</label>
                 {{ form.como_teve_conhecimento_existencia_fitclub }}
             </div>
 
             <div class="form-group">
-                <label for="">Regime Atual:</label>
-                {{ form.instance.get_regime_display }}
+                <label for="">Regime:</label>
+                {{ regime }}
             </div>
 
             <div class="button-group">
