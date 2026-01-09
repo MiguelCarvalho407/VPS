@@ -175,7 +175,6 @@ class Dados_biometricos(models.Model):
 
 
 class NomeTipoTreino(models.Model):
-    # id = models.AutoField(primary_key=True)
     nome = models.CharField(max_length=100)
 
     def __str__(self):
@@ -262,7 +261,7 @@ class Treino(models.Model):
 
 class Reservas(models.Model):
     utilizador = models.ForeignKey(Utilizadores, on_delete=models.CASCADE)
-    treino = models.ForeignKey(Treino, on_delete=models.CASCADE)
+    treino = models.ForeignKey(Treino, on_delete=models.CASCADE, related_name='reservas')
     confirmado = models.BooleanField(null=True, blank=True)
 
     class Meta:
@@ -324,6 +323,26 @@ class Recordes(models.Model):
 
 
 
+class AvaliacaoMensal(models.Model):
+    utilizador = models.ForeignKey(Utilizadores, on_delete=models.CASCADE)
+    ano = models.IntegerField()
+    mes = models.IntegerField()
+    nivel_satisfacao = models.IntegerField()
+    data_criacao = models.DateField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('utilizador', 'ano', 'mes')
+
+
+class AvaliacaoTrimestral(models.Model):
+    utilizador = models.ForeignKey(Utilizadores, on_delete=models.CASCADE)
+    ano = models.IntegerField()
+    mes = models.IntegerField()
+    nivel_satisfacao = models.IntegerField(default=None)
+    data_criacao = models.DateField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('utilizador', 'ano', 'mes')
 
 #TESTES
 

@@ -56,6 +56,8 @@ urlpatterns = [
     path('exportar_excel/', views.export_to_excel, name='exportar_excel'),
     # EXPORTA OS DADOS DE UM UTILIZADOR ESPECIFICO
     path('exportar_utilizador/<int:user_id>/', views.export_user_data_to_excel, name='exportar_utilizador'),
+    path('exportar-avaliacoes-mensais/', views.baixar_avaliacoes_mensais, name='baixar_avaliacoes_mensais'),
+    path('exportar-treinos/', views.exportar_treinos, name='exportar_treinos'),
 
     path('assiduidade/exportar-estatisticas/',views.exportar_assiduidade_estatisticas_excel,name='exportar_assiduidade_estatisticas'),
 
@@ -94,6 +96,8 @@ urlpatterns = [
     path('mensalidades/', views.mensalidades, name='mensalidades'),
     path('regras-treino/', views.regras_treino, name='regras_treino'),
     path('suspensao-cancelamento-inscricao/', views.suspensao_cancelamento_inscricao, name='suspensao_cancelamento_inscricao'),
+
+    path('teste/', views.descarregar_dados, name='descarregar_dados')
 
 ]
 

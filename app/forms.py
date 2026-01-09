@@ -511,5 +511,18 @@ class CriarAulaOnline(forms.ModelForm):
 
 class EscolherRegimeForm(forms.Form):
     regime = forms.ChoiceField(choices=Utilizadores.REGIME_CHOICES, widget=forms.RadioSelect())
+    nivel_satisfacao = forms.ChoiceField(
+        choices=[(i, i) for i in range(1, 6)],
+        widget=forms.RadioSelect,
+        label="Avaliação mensal",
+        required=True
+    )
+
+    nivel_satisfacao_trimestral = forms.ChoiceField(
+        choices=[(i, i) for i in range(1, 6)],
+        widget=forms.RadioSelect,
+        label="Avaliação Trimestral",
+        required=False
+    )
 
 

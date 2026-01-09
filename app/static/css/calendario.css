@@ -402,6 +402,27 @@ body {
 }
 
 
+.datas{
+    text-align: center;
+    margin-top: 20px;
+}
+
+
+.btn-treinos{
+    text-align: center;
+}
+
+.btn-descarregar-treinos{
+    width: 200px;
+    margin: 10px auto;
+    height: 40px;
+    border-radius: 5px;
+    border: none;
+    background-color: #0d6efd;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+}
 
 
 @media (max-width: 768px) {

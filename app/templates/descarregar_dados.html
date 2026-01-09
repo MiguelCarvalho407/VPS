@@ -1,0 +1,63 @@
+{% extends 'FC_APP/fcBase.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+
+  <h2 class="text-center mb-4">Exportar Estatísticas</h2>
+
+  <!-- Informações Totais -->
+  <div class="card mb-4 shadow-sm">
+    <div class="card-body text-center">
+      <a href="{% url 'exportar_excel' %}" class="btn btn-primary btn-lg w-75">
+        Descarregar Informações Totais Membros
+      </a>
+    </div>
+  </div>
+
+  <!-- Assiduidade -->
+  <div class="card mb-4 shadow-sm">
+    <div class="card-body text-center">
+      <form method="get" action="{% url 'exportar_assiduidade_estatisticas' %}" class="row g-2 justify-content-center align-items-center">
+        <div class="col-auto">
+          <input type="month" id="mes-estatisticas" name="mes" class="form-control" required>
+        </div>
+        <div class="col-auto">
+          <button type="submit" class="btn btn-success">
+            Descarregar Assiduidade Membros
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Avaliações Mensais -->
+  <div class="card mb-4 shadow-sm">
+    <div class="card-body text-center">
+      <form method="get" action="{% url 'baixar_avaliacoes_mensais' %}" class="row g-2 justify-content-center align-items-center">
+        <div class="col-auto">
+          <select name="ano" class="form-select">
+            {% for a in anos %}
+              <option value="{{ a }}">{{ a }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-auto">
+          <select name="mes" class="form-select">
+            {% for m in meses %}
+              <option value="{{ m }}">{{ m }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-auto">
+          <button type="submit" class="btn btn-warning">
+            Descarregar Níveis Satisfação
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}

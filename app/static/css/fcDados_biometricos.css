@@ -147,6 +147,18 @@ body {
     cursor: pointer;
 }
 
+.imagens{
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+}
+
+.imagens .imc{
+    gap: 15px;
+}
+
+
 
 @media (max-width: 768px) {
     .filter-container {
@@ -156,5 +168,17 @@ body {
 
     .grid-container {
         grid-template-columns: 1fr;
+    }
+
+    .imagens{
+        grid: none;
+    }
+
+    .imagens .imc {
+        width: 100%;
+    }
+
+    .imagens .perimetro-abdominal{
+        width: 100%;
     }
 }

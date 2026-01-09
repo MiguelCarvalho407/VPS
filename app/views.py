@@ -177,15 +177,50 @@ MESES_PT = [
     'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
 ]
 
+def mes_anterior(ref_date=None):
+    if ref_date is None:
+        ref_date = date.today()
+
+    if ref_date.month == 1:
+        return ref_date.year - 1, 12
+    return ref_date.year, ref_date.month - 1
+
+def is_trimestral(mes):
+    return mes in [3, 6, 9, 12]
+
 @login_required
 def escolher_regime(request):
+    hoje = date.today()
+    ano, mes = mes_anterior(hoje)
+
+    trimestre = is_trimestral(mes)
+
     if request.method == 'POST':
         form = EscolherRegimeForm(request.POST)
         if form.is_valid():
-            regime = form.cleaned_data['regime']
-            request.user.regime = regime
-            request.user.regime_data = date.today()
-            request.user.save()
+            with transaction.atomic():
+                regime = form.cleaned_data['regime']
+                request.user.regime = regime
+                request.user.regime_data = date.today()
+                request.user.save()
+
+                ano, mes = mes_anterior(request.user.regime_data)
+
+                AvaliacaoMensal.objects.create(
+                    utilizador=request.user,
+                    ano=ano,
+                    mes=mes,
+                    nivel_satisfacao=form.cleaned_data['nivel_satisfacao']
+                )
+
+                if trimestre:
+                    nivel_satisfacao_trimestral = form.cleaned_data.get('nivel_satisfacao_trimestral')
+                    AvaliacaoTrimestral.objects.create(
+                        utilizador=request.user,
+                        ano=ano,
+                        mes=mes,
+                        nivel_satisfacao=nivel_satisfacao_trimestral
+                    )
 
             hoje = request.user.regime_data
             mes_nome = MESES_PT[hoje.month - 1]
@@ -213,7 +248,7 @@ def escolher_regime(request):
             return redirect('fcBase')
     else:
         form = EscolherRegimeForm()
-    return render(request, 'escolher_regime.html', {'form': form})
+    return render(request, 'escolher_regime.html', {'form': form, 'trimestre': trimestre})
 
 
 
@@ -603,6 +638,10 @@ def detalhe_dadosbiometricos(request, user_id):
 def membros(request):
     if request.user.funcao != 'Ativo':
         return redirect('acesso_negado')
+    
+    ano_atual = date.today().year
+    anos = list(range(ano_atual - 2, ano_atual + 1))
+    meses = list(range(1, 13))
 
     query = request.GET.get('q', '')  # Obtém o termo de pesquisa da URL
     utilizadores = Utilizadores.objects.all()
@@ -615,7 +654,7 @@ def membros(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'FC_APP/fcMembros.html', {'page_obj': page_obj, 'query': query})
+    return render(request, 'FC_APP/fcMembros.html', {'page_obj': page_obj, 'query': query, 'anos': anos, 'meses': meses})
 
 
 @login_required
@@ -1651,6 +1690,104 @@ def export_user_data_to_excel(request, user_id):
     wb.save(response)
     return response
 
+import csv
+
+@login_required
+def baixar_avaliacoes_mensais(request):
+    ano = int(request.GET.get('ano', date.today().year))
+    mes = int(request.GET.get('mes', date.today().month - 1 or 12))
+
+    avaliacoes_mensais = AvaliacaoMensal.objects.filter(
+        ano=ano,
+        mes=mes
+    ).select_related('utilizador')
+
+    avaliacoes_trimestrais = AvaliacaoTrimestral.objects.filter(
+        ano=ano,
+        mes=mes
+    ).select_related('utilizador')
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = f"Avaliacoes_{mes}_{ano}"
+
+    ws.append(['Utilizador', 'Mes', 'Ano', 'Nível Satisfação - Mensal', 'Nível Satisfação - Trimestral'])
+
+    for a in avaliacoes_mensais:
+        ws.append([
+            a.utilizador.username,
+            a.mes,
+            str(a.ano),
+            a.nivel_satisfacao
+        ])
+
+    for a in avaliacoes_trimestrais:
+        ws.append([
+            a.utilizador.username,
+            a.mes,
+            str(a.ano),
+            '-----',
+            a.nivel_satisfacao,
+        ])
+
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = f'attachment; filename="avaliacoes_mensais_{mes}_{ano}.xlsx"'
+        
+    wb.save(response)
+    return response
+
+
+from django.db.models import Count
+
+
+@login_required
+def exportar_treinos(request):
+    # Datas obrigatórias
+    data_inicio_str = request.GET.get('data_inicio')
+    data_fim_str = request.GET.get('data_fim')
+
+    if not data_inicio_str or not data_fim_str:
+        return HttpResponse("Por favor, forneça data de início e data de fim.", status=400)
+
+    try:
+        data_inicio = datetime.strptime(data_inicio_str, "%Y-%m-%d").date()
+        data_fim = datetime.strptime(data_fim_str, "%Y-%m-%d").date()
+    except ValueError:
+        return HttpResponse("Formato de data inválido. Use YYYY-MM-DD.", status=400)
+
+    treinos = Treino.objects.filter(
+        data_inicio__gte=data_inicio,
+        data_fim__lte=data_fim
+    ).select_related('tipo_treino_nome').annotate(numero_pessoas=Count('reservas')).order_by('data_inicio', 'hora_inicio')
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = f"Treinos_{data_inicio}_{data_fim}"
+
+    ws.append(['Dia', 'Tipo Treino', 'Tipo Treino Personalizado', 'Hora Início', 'Hora Fim', 'Reservas', 'Máximo Participantes'])
+
+    for t in treinos:
+        ws.append([
+            t.data_inicio.strftime("%Y-%m-%d"),
+            t.get_tipo_treino_display(),
+            getattr(t.tipo_treino_nome, 'nome', ''),
+            t.hora_inicio.strftime("%H:%M"),
+            t.hora_fim.strftime("%H:%M"),
+            t.numero_pessoas,
+            t.max_participantes,
+        ])
+
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = f'attachment; filename="treinos_{data_inicio}_{data_fim}.xlsx"'
+
+    wb.save(response)
+    return response
+
+
 
 
 
@@ -1893,3 +2030,13 @@ def regras_treino(request):
 @login_required
 def suspensao_cancelamento_inscricao(request):
     return render(request, 'REGULAMENTOS/suspencao_cancelamento_inscricao.html')
+
+
+@login_required
+def descarregar_dados(request):
+    ano_atual = date.today().year
+    anos = list(range(ano_atual - 2, ano_atual + 1))
+    meses = list(range(1, 13))
+
+    return render(request, 'descarregar_dados.html', {'anos': anos, 'meses': meses})
+

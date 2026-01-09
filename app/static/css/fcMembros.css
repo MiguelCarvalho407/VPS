@@ -75,8 +75,8 @@ h1 {
     padding: 10px 20px;
     border-radius: 8px;
     font-size: 14px;
-    color: #fff;
-    background-color: #28a745;
+    color: #000;
+    background-color: #0dcaf0;
     transition: all 0.3s ease;
     cursor: pointer;
     margin-bottom: 5%;

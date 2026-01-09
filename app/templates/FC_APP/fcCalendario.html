@@ -47,6 +47,26 @@
     {% if request.user.is_staff %}
     <a href="{% url 'criar_treino' %}" class="btn-criar-evento">Criar Evento</a>
     <a href="{% url 'apagar_treinos_em_massa' %}" class="btn-apagar-treinos-massa">Apagar Eventos</a>
+
+
+    <form method="get" action="{% url 'exportar_treinos' %}">
+        <div class="datas">
+            <div class="data-inicio">
+                <label for="data_inicio" class="form-label">Data Início:</label>
+                <input type="date" name="data_inicio" id="data_inicio" class="form-control" required>
+            </div>
+
+            <div class="data-fim">
+                <label for="data_fim" class="form-label">Data Fim:</label>
+                <input type="date" name="data_fim" id="data_fim" class="form-control" required>
+            </div>
+        </div>
+
+        <div class="btn-treinos">
+            <button type="submit" class="btn-descarregar-treinos">Descarregar Treinos</button>
+        </div>
+        
+    </form>
     {% endif %}
 </div>
 
