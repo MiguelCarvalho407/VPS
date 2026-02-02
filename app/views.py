@@ -206,7 +206,7 @@ def escolher_regime(request):
 
                 ano, mes = mes_anterior(request.user.regime_data)
 
-                AvaliacaoMensal.objects.create(
+                AvaliacaoMensal.objects.get_or_create(
                     utilizador=request.user,
                     ano=ano,
                     mes=mes,
@@ -215,7 +215,7 @@ def escolher_regime(request):
 
                 if trimestre:
                     nivel_satisfacao_trimestral = form.cleaned_data.get('nivel_satisfacao_trimestral')
-                    AvaliacaoTrimestral.objects.create(
+                    AvaliacaoTrimestral.objects.get_or_create(
                         utilizador=request.user,
                         ano=ano,
                         mes=mes,
