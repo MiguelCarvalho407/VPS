@@ -265,32 +265,34 @@ class DadosBiometricosForm(forms.ModelForm):
     )
     peso = forms.DecimalField(
         max_digits=5, decimal_places=2,
-        widget=forms.NumberInput(attrs={'step': '0.01', 'readonly': 'readonly'}), required=False
-    )
-    massa_gorda = forms.DecimalField(
-        max_digits=5, decimal_places=2,
-        widget=forms.NumberInput(attrs={'step': '0.01', 'readonly': 'readonly'}), required=False
-    )
-    massa_muscular = forms.DecimalField(
-        max_digits=5, decimal_places=2,
-        widget=forms.NumberInput(attrs={'step': '0.01', 'readonly': 'readonly'}), required=False
-    )
-    agua = forms.DecimalField(
-        max_digits=5, decimal_places=2,
-        widget=forms.NumberInput(attrs={'step': '0.01', 'readonly': 'readonly'}), required=False
+        # widget=forms.NumberInput(attrs={'step': '0.01', 'readonly': 'readonly'}), required=False
+        widget=forms.NumberInput(attrs={'step': '0.01'}), required=True
     )
     gordura_visceral = forms.DecimalField(
         max_digits=5, decimal_places=2,
-        widget=forms.NumberInput(attrs={'step': '0.01', 'readonly': 'readonly'}), required=False
+        # widget=forms.NumberInput(attrs={'step': '0.01', 'readonly': 'readonly'}), required=False
+        widget=forms.NumberInput(attrs={'step': '0.01'}), required=True
     )
-    idade_biologica = forms.DecimalField(
-        max_digits=5, decimal_places=2,
-        widget=forms.NumberInput(attrs={'step': '1', 'readonly': 'readonly'}), required=False
-    )
-    nivel_fisico = forms.DecimalField(
-        max_digits=5, decimal_places=2,
-        widget=forms.NumberInput(attrs={'step': '0.01', 'readonly': 'readonly'}), required=False
-    )
+    # massa_gorda = forms.DecimalField(
+    #     max_digits=5, decimal_places=2,
+    #     widget=forms.NumberInput(attrs={'step': '0.01', 'readonly': 'readonly'}), required=False
+    # )
+    # massa_muscular = forms.DecimalField(
+    #     max_digits=5, decimal_places=2,
+    #     widget=forms.NumberInput(attrs={'step': '0.01', 'readonly': 'readonly'}), required=False
+    # )
+    # agua = forms.DecimalField(
+    #     max_digits=5, decimal_places=2,
+    #     widget=forms.NumberInput(attrs={'step': '0.01', 'readonly': 'readonly'}), required=False
+    # )
+    # idade_biologica = forms.DecimalField(
+    #     max_digits=5, decimal_places=2,
+    #     widget=forms.NumberInput(attrs={'step': '1', 'readonly': 'readonly'}), required=False
+    # )
+    # nivel_fisico = forms.DecimalField(
+    #     max_digits=5, decimal_places=2,
+    #     widget=forms.NumberInput(attrs={'step': '0.01', 'readonly': 'readonly'}), required=False
+    # )
     
     def clean(self):
         cleaned_data = super().clean()
@@ -511,11 +513,17 @@ class CriarAulaOnline(forms.ModelForm):
 
 class EscolherRegimeForm(forms.Form):
     regime = forms.ChoiceField(choices=Utilizadores.REGIME_CHOICES, widget=forms.RadioSelect())
+
+    mes_ausente = forms.BooleanField(
+        required=False,
+        label='Não compareceu este mês'
+    )
+
     nivel_satisfacao = forms.ChoiceField(
-        choices=[(i, i) for i in range(0, 6)],
+        choices=[(i, i) for i in range(1, 6)],
         widget=forms.RadioSelect,
         label="Avaliação mensal",
-        required=True
+        required=False
     )
 
     nivel_satisfacao_trimestral = forms.ChoiceField(
@@ -524,5 +532,30 @@ class EscolherRegimeForm(forms.Form):
         label="Avaliação Trimestral",
         required=False
     )
+
+    def __init__(self, *args, is_trimestral=False, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.is_trimestral = is_trimestral
+
+    def clean(self):
+        cleaned_data = super().clean()
+        mes_ausente = cleaned_data.get('mes_ausente')
+        nivel = cleaned_data.get('nivel_satisfacao')
+        nivel_trimestral = cleaned_data.get('nivel_satisfacao_trimestral')
+
+        if not mes_ausente and not nivel:
+            self.add_error('nivel_satisfacao', 'É obrigatório avaliar se não esteve ausente.')
+
+        if mes_ausente:
+            cleaned_data['nivel_satisfacao'] = None
+
+
+        if self.is_trimestral and not nivel_trimestral:
+            self.add_error(
+                'nivel_satisfacao_trimestral',
+                'É obrigatório avaliar o trimestre.'
+            )
+
+        return cleaned_data
 
 

@@ -73,6 +73,10 @@ def signup(request):
 
 
 def dologin(request):
+    # MANDAR PARA O INICIO SE A SESSÃO AINDA FOR VÁLIDA (EVITAR SEMPRE OS LOGINS)
+    if request.user.is_authenticated:
+        return redirect('fcBase')
+
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -196,7 +200,7 @@ def escolher_regime(request):
     trimestre = is_trimestral(mes)
 
     if request.method == 'POST':
-        form = EscolherRegimeForm(request.POST)
+        form = EscolherRegimeForm(request.POST, is_trimestral=trimestre)
         if form.is_valid():
             with transaction.atomic():
                 regime = form.cleaned_data['regime']
@@ -210,7 +214,11 @@ def escolher_regime(request):
                     utilizador=request.user,
                     ano=ano,
                     mes=mes,
-                    nivel_satisfacao=form.cleaned_data['nivel_satisfacao']
+                    #nivel_satisfacao=form.cleaned_data['nivel_satisfacao']
+                    defaults={
+                        'mes_ausente': form.cleaned_data['mes_ausente'],
+                        'nivel_satisfacao': form.cleaned_data['nivel_satisfacao']
+                    }
                 )
 
                 if trimestre:
@@ -247,7 +255,7 @@ def escolher_regime(request):
 
             return redirect('fcBase')
     else:
-        form = EscolherRegimeForm()
+        form = EscolherRegimeForm(is_trimestral=trimestre)
     return render(request, 'escolher_regime.html', {'form': form, 'trimestre': trimestre})
 
 
@@ -818,18 +826,36 @@ def reservas(request, treino_id):
             return redirect('calendario')
 
         # REGIMES
+        # if request.user.regime == 'regime_basico' or request.user.regime == 'regime_basico+plano_alimentar':
+        #     hoje = treino.data_inicio
+        #     inicio_semana = hoje - timedelta(days=hoje.weekday())
+        #     fim_semana = inicio_semana + timedelta(days=6)
+
+        #     reservas_semana = Reservas.objects.filter(
+        #         utilizador=request.user,
+        #         treino__data_inicio__range=(inicio_semana, fim_semana)
+        #     ).count()
+
+        #     if reservas_semana >= 2:
+        #         messages.error(request, "Com o regime básico, só podes marcar 2 treinos por semana.")
+        #         return redirect('calendario')            
+
         if request.user.regime == 'regime_basico' or request.user.regime == 'regime_basico+plano_alimentar':
             hoje = treino.data_inicio
-            inicio_semana = hoje - timedelta(days=hoje.weekday())
-            fim_semana = inicio_semana + timedelta(days=6)
+            inicio_mes = hoje.replace(day=1)
 
-            reservas_semana = Reservas.objects.filter(
+            if hoje.month== 12:
+                fim_mes = hoje.replace(year=hoje.year + 1, month=1, day=1) - timedelta(days=1)
+            else:
+                fim_mes = hoje.replace(month=hoje.month + 1, day=1) - timedelta(days=1)
+
+            reservas_mes = Reservas.objects.filter(
                 utilizador=request.user,
-                treino__data_inicio__range=(inicio_semana, fim_semana)
+                treino__data_inicio__range=(inicio_mes, fim_mes)
             ).count()
 
-            if reservas_semana >= 2:
-                messages.error(request, "Com o regime básico, só podes marcar 2 treinos por semana.")
+            if reservas_mes >= 8:
+                messages.error(request, "Com o regime básico, só podes marcar 8 treinos por mês.")
                 return redirect('calendario')
 
 
@@ -1711,14 +1737,15 @@ def baixar_avaliacoes_mensais(request):
     ws = wb.active
     ws.title = f"Avaliacoes_{mes}_{ano}"
 
-    ws.append(['Utilizador', 'Mes', 'Ano', 'Nível Satisfação - Mensal', 'Nível Satisfação - Trimestral'])
+    ws.append(['Utilizador', 'Mes', 'Ano', 'Ausente no Mês', 'Nível Satisfação - Mensal', 'Nível Satisfação - Trimestral'])
 
     for a in avaliacoes_mensais:
         ws.append([
             a.utilizador.username,
             a.mes,
             str(a.ano),
-            a.nivel_satisfacao
+            "Sim" if a.mes_ausente else "Não",
+            a.nivel_satisfacao,
         ])
 
     for a in avaliacoes_trimestrais:
@@ -1726,6 +1753,7 @@ def baixar_avaliacoes_mensais(request):
             a.utilizador.username,
             a.mes,
             str(a.ano),
+            '-----',
             '-----',
             a.nivel_satisfacao,
         ])

@@ -327,7 +327,8 @@ class AvaliacaoMensal(models.Model):
     utilizador = models.ForeignKey(Utilizadores, on_delete=models.CASCADE)
     ano = models.IntegerField()
     mes = models.IntegerField()
-    nivel_satisfacao = models.IntegerField()
+    mes_ausente = models.BooleanField(default=False)
+    nivel_satisfacao = models.IntegerField(null=True)
     data_criacao = models.DateField(auto_now_add=True)
 
     class Meta:

@@ -148,7 +148,10 @@ AUTH_USER_MODEL = 'app.Utilizadores'
 
 LOGIN_URL = '/login/'
 
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 14
+
+CSRF_FAILURE_VIEW = 'django.views.csrf.csrf_failure'
 
 load_dotenv()
 
